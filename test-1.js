@@ -48,15 +48,22 @@ function step() {
             break;
 
         case STATES.PROFILE:
-            // 点击 Profile
             desc('Profile').click(); sleep(2000);
-            // 根据是否已登录决定下一步
-            if (desc('Add another account').exists()) {
-                showToast('未登录，进入登录流程');
+
+            if (text('Log in to TikTok').exists() && text('Use phone / email / username').exists()) {
+                showToast('检测到登录界面，进入登录流程');
                 currentState = STATES.LOGIN_FLOW;
-            } else {
+            } else if (desc('Add another account').exists()) {
                 showToast('已登录，进入退出流程');
                 currentState = STATES.LOGOUT_FLOW;
+            } else if (text('Use phone / email / username').exists()) {
+                showToast('检测到注册界面或未知界面，打印界面文字');
+                printAllTexts();
+                sleep(2000);
+            } else {
+                showToast('无法判断当前状态，打印界面文字');
+                printAllTexts();
+                sleep(2000);
             }
             break;
 
