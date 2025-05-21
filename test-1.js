@@ -37,28 +37,53 @@ function safeClick(selector, desc, timeout = 3000) {
     }
 }
 
-// 封装安全输入
 function safeSetText(field, text, desc) {
     showToast(`尝试输入: ${desc}`);
+    if (!field) {
+        showToast(`输入失败: ${desc} 元素不存在`);
+        return false;
+    }
+
     field.click(); sleep(500);
-    field.setText(text);
-    sleep(500);
+
+    try {
+        // 尝试清空原内容
+        field.setText('');
+        sleep(300);
+        field.setText(text);
+        sleep(500);
+    } catch (e) {
+        showToast(`setText异常: ${e}`);
+    }
+
+    // 检查是否成功
     if (field.text && field.text() === text) {
         showToast(`输入成功: ${desc}`);
         return true;
+    }
+
+    // 使用 shell input text 方式
+    showToast(`setText失败，尝试shell输入: ${desc}`);
+    field.click(); sleep(300);
+    shellInputText(text);
+    sleep(500);
+
+    // 最后一次验证
+    if (field.text && field.text() === text) {
+        showToast(`shell输入成功: ${desc}`);
+        return true;
     } else {
-        showToast(`setText未生效: ${desc}`);
-        shell(`input text ${text}`, true);
-        sleep(500);
-        if (field.text && field.text() === text) {
-            showToast(`shell输入成功: ${desc}`);
-            return true;
-        } else {
-            showToast(`输入失败: ${desc}`);
-            return false;
-        }
+        showToast(`输入失败: ${desc}`);
+        return false;
     }
 }
+
+// 替代方案：通过 shell 输入文本（兼容英文符号和空格）
+function shellInputText(text) {
+    let encoded = encodeURIComponent(text).replace(/%/g, '%25');
+    shell(`input text "${encoded}"`, true);
+}
+
 
 // 状态机核心
 let currentState = STATES.CHECK_LAUNCH;
@@ -183,4 +208,105 @@ while (true) {
     sleep(500);
 }
 
-// 省略邮箱验证码相关函数（同上）
+
+// <--------------------- 邮箱验证码获取 开始 --------------------->
+
+
+// 日志函数
+function log(level, message) {
+    let timestamp = new Date().toISOString();
+    let logMessage = `[${timestamp}] ${level} - ${message}`;
+    console.log(logMessage);
+    try {
+        files.append("/sdcard/tempmail_client.log", logMessage + "\n");
+    } catch (e) {
+        console.log(`日志写入失败: ${e.message}`);
+    }
+}
+
+// 设置 shortid
+function setShortid(shortid) {
+    shortid = extractShortid(config.email);
+    if (!shortid) {
+        log("ERROR", "shortid 不能为空");
+        return null;
+    }
+    try {
+        log("INFO", `设置 shortid: ${shortid}`);
+        let response = http.get(`http://1.95.133.57:3388/set_shortid?shortid=${shortid}`);
+        if (response.statusCode !== 200) {
+            log("ERROR", `设置 shortid 失败: HTTP ${response.statusCode}`);
+            return null;
+        }
+        let data = response.body.json();
+        if (data.error) {
+            log("ERROR", `设置 shortid 失败: ${data.error}`);
+            return null;
+        }
+        log("INFO", `邮箱设置成功: ${data.email}`);
+        return data.email;
+    } catch (e) {
+        log("ERROR", `设置 shortid 失败: ${e.message}`);
+        return null;
+    }
+}
+
+// 获取验证码
+function getCode(shortid, maxAttempts = 30, interval = 5000) {
+    shortid = extractShortid(config.email);
+    if (!shortid) {
+        log("ERROR", "shortid 不能为空");
+        return null;
+    }
+    log("INFO", `开始轮询验证码 for shortid: ${shortid}`);
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        try {
+            let response = http.get(`http://1.95.133.57:3388/get_code?shortid=${shortid}`);
+            if (response.statusCode !== 200) {
+                log("ERROR", `获取验证码失败: HTTP ${response.statusCode}`);
+                sleep(interval);
+                continue;
+            }
+            let data = response.body.json();
+            if (data.error) {
+                log("ERROR", `获取验证码失败: ${data.error}`);
+                return null;
+            }
+            if (data.code) {
+                log("INFO", `收到验证码: ${data.code} for 邮箱: ${data.email}`);
+                toast(`验证码: ${data.code}`);
+                return data.code;
+            }
+            log("INFO", `尝试 ${attempt}/${maxAttempts}: 未找到验证码`);
+            sleep(interval);
+        } catch (e) {
+            log("ERROR", `获取验证码失败: ${e.message}`);
+            sleep(interval);
+        }
+    }
+    log("ERROR", `达到最大尝试次数 (${maxAttempts})，未找到验证码`);
+    toast("未获取到验证码");
+    return null;
+}
+
+// 提取 shortid
+function extractShortid(email) {
+    if (!email || typeof email !== 'string') {
+        log("ERROR", "邮箱地址无效");
+        return null;
+    }
+    try {
+        // 使用 split 提取 shortid
+        let parts = email.split('@');
+        if (parts.length !== 2 || parts[1] !== 'tsbytlj.com') {
+            log("ERROR", `邮箱格式错误: ${email}，预期格式为 <shortid>@tsbytlj.com`);
+            return null;
+        }
+        let shortid = parts[0];
+        log("INFO", `从邮箱 ${email} 提取 shortid: ${shortid}`);
+        return shortid;
+    } catch (e) {
+        log("ERROR", `提取 shortid 失败: ${e.message}`);
+        return null;
+    }
+}
