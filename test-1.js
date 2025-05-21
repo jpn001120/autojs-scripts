@@ -104,12 +104,10 @@ function login() {
         // 输入邮箱/用户名
         let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
         if (emailField) {
-            // 点击聚焦并输入邮箱
-            emailField.click();
-            sleep(500);
+            emailField.click(); sleep(500);
             emailField.setText(config.email);
             sleep(500);
-            // 如果文本未成功输入，使用 shell 命令输入作为备用
+            // 备用输入
             if (emailField.text() !== config.email) {
                 console.log('setText 未生效，使用 shell 输入邮箱');
                 shell('input text ' + config.email, true);
@@ -120,18 +118,12 @@ function login() {
             back(); sleep(1000);
             continue;
         }
-        } else {
-            showToast('未找到邮箱输入框');
-            back(); sleep(1000);
-            continue;
-        }
         // 获取验证码
         let emailAddr = setShortid(config.email);
         toast('验证码请求已发送');
         // 点击 Continue
         if (text('Continue').exists()) {
-            text('Continue').click();
-            sleep(1000);
+            text('Continue').click(); sleep(1000);
         }
         // 拉取并输入验证码
         if (emailAddr) {
@@ -146,9 +138,11 @@ function login() {
         } else {
             showToast('验证码获取失败');
             back(); sleep(1000);
+            continue;
         }
     }
     handleError('登录多次失败，退出流程');
+}
 }
 
 // 退出实现
