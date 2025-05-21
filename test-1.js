@@ -40,47 +40,56 @@ function safeClick(selector, desc, timeout = 3000) {
 function safeSetText(field, text, desc) {
     showToast(`尝试输入: ${desc}`);
     try {
-        // 尝试正常 setText
         field.click(); sleep(500);
-        field.setText(text); sleep(500);
+
+        // 1. 原始 setText 尝试
+        field.setText(text); sleep(800);
         if (field.text && field.text() === text) {
             showToast(`输入成功: ${desc}`);
             return true;
         }
 
-        // 如果失败，尝试使用 ADB 模拟键盘输入
-        showToast(`setText未生效，尝试 ADB 输入: ${desc}`);
-        field.click(); sleep(1000); // 确保输入框已聚焦
-
-        // 清空旧内容（多次删除）
-        for (let i = 0; i < 50; i++) {
-            shell("input keyevent 67", true); // KEYCODE_DEL
-            sleep(50);
+        // 2. 使用剪贴板粘贴
+        setClip(text); sleep(300);
+        shell("input keyevent 279", true); // 粘贴
+        sleep(800);
+        if (field.text && field.text().indexOf(text) !== -1) {
+            showToast(`粘贴成功: ${desc}`);
+            return true;
         }
 
-        // 分字符输入，避免特殊字符转义失败
+        // 3. 使用 keys.text 兜底
+        try {
+            keys.text(text); sleep(1000);
+            if (field.text && field.text().indexOf(text) !== -1) {
+                showToast(`keys 输入成功: ${desc}`);
+                return true;
+            }
+        } catch (e) {
+            showToast(`keys 模块失败: ${e}`);
+        }
+
+        // 4. 最后尝试 shell 输入逐字符
+        for (let i = 0; i < 50; i++) shell("input keyevent 67", true); // 删除
         for (let ch of text.split("")) {
-            let safeChar = ch === " " ? "%s" : ch;
-            shell(`input text "${safeChar}"`, true);
+            shell(`input text "${ch}"`, true);
             sleep(100);
         }
 
-        sleep(800);
-
-        // 检查输入是否正确
-        let currentText = field.text ? field.text() : "";
-        if (currentText.indexOf(text) !== -1) {
-            showToast(`ADB 输入成功: ${desc}`);
+        sleep(500);
+        if (field.text && field.text().indexOf(text) !== -1) {
+            showToast(`shell 输入成功: ${desc}`);
             return true;
-        } else {
-            showToast(`输入失败: ${desc}，当前内容: ${currentText}`);
-            return false;
         }
+
+        showToast(`所有输入方式均失败: ${desc}`);
+        return false;
     } catch (e) {
         showToast(`safeSetText 异常: ${desc} ${e}`);
         return false;
     }
 }
+
 
 
 // 替代方案：通过 shell 输入文本（兼容英文符号和空格）
