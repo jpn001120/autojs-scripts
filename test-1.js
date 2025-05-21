@@ -172,10 +172,17 @@ function login() {
         sleep(1000);
         if (!safeClick(desc('Email / Username'), 'Email/Username 按钮')) continue;
         sleep(1000);
-        shell(`input text "111111111111111"`, true);
-        let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
-        if (!emailField) { showToast('未找到邮箱输入框'); back(); sleep(1000); continue; }
+        // 获取邮箱输入框（第一个 EditText）
+        let emailField = className('android.widget.EditText').findOne(3000);
+        if (!emailField) {
+            showToast('未找到邮箱输入框'); 
+            back(); sleep(1000);
+            continue;
+        }
         if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
+        // let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
+        // if (!emailField) { showToast('未找到邮箱输入框'); back(); sleep(1000); continue; }
+        // if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
         let emailAddr = setShortid(config.email);
         showToast('短ID 设置: ' + emailAddr);
         safeClick(text('Continue'), 'Continue 按钮'); sleep(1000);
