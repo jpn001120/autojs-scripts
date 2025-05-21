@@ -74,6 +74,7 @@ function step() {
             showToast('所有流程完成');
             exit();
             break;
+        sleep(1000);
     }
 }
 
