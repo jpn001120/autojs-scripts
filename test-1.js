@@ -1,5 +1,4 @@
 // TikTok 自动化脚本 - 基于状态机的流程管理
-const EMAIL_SERVER_URL = "http://1.95.133.57:3388";
 // 1. 定义各个状态
 const STATES = {
     CHECK_LAUNCH: 'CHECK_LAUNCH',
@@ -39,32 +38,25 @@ function step() {
             break;
 
         case STATES.HOME:
+            // 如果首页有“Profile”按钮，切换到 PROFILE
             if (desc('Profile').exists()) {
                 currentState = STATES.PROFILE;
             } else {
                 showToast('未在首页检测到 Profile，尝试回退');
-                printAllTexts();
                 back(); sleep(1000);
             }
             break;
 
         case STATES.PROFILE:
+            // 点击 Profile
             desc('Profile').click(); sleep(2000);
-
-            if (text('Log in to TikTok').exists() && text('Use phone / email / username').exists()) {
-                showToast('检测到登录界面，进入登录流程');
+            // 根据是否已登录决定下一步
+            if (desc('Add another account').exists()) {
+                showToast('未登录，进入登录流程');
                 currentState = STATES.LOGIN_FLOW;
-            } else if (desc('Add another account').exists()) {
+            } else {
                 showToast('已登录，进入退出流程');
                 currentState = STATES.LOGOUT_FLOW;
-            } else if (text('Use phone / email / username').exists()) {
-                showToast('检测到注册界面或未知界面，打印界面文字');
-                printAllTexts();
-                sleep(2000);
-            } else {
-                showToast('无法判断当前状态，打印界面文字');
-                printAllTexts();
-                sleep(2000);
             }
             break;
 
@@ -81,11 +73,6 @@ function step() {
         case STATES.DONE:
             showToast('所有流程完成');
             exit();
-            break;
-        default:
-            showToast('无法判断当前状态，打印界面文字');
-            printAllTexts();
-            sleep(2000); // 等待你人工分析
             break;
     }
 }
@@ -117,8 +104,22 @@ function login() {
         // 输入邮箱/用户名
         let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
         if (emailField) {
+            // 点击聚焦并输入邮箱
+            emailField.click();
+            sleep(500);
             emailField.setText(config.email);
             sleep(500);
+            // 如果文本未成功输入，使用 shell 命令输入作为备用
+            if (emailField.text() !== config.email) {
+                console.log('setText 未生效，使用 shell 输入邮箱');
+                shell('input text ' + config.email, true);
+                sleep(500);
+            }
+        } else {
+            showToast('未找到邮箱输入框');
+            back(); sleep(1000);
+            continue;
+        }
         } else {
             showToast('未找到邮箱输入框');
             back(); sleep(1000);
@@ -153,34 +154,11 @@ function login() {
 // 退出实现
 function logout() {
     showToast('执行登出');
-    // 尝试滚动查找"Settings and privacy"
-    let setting = text("Settings and privacy").findOne(5000);
-    if (setting) {
-        setting.click(); sleep(500);
-        // 继续后续操作
-        if (text("Log out").exists()) {
-            click("Log out"); sleep(1000);
-            if (text("Log out").exists()) {
-                click("Log out"); sleep(500);
-            }
-            showToast('登出完成');
-        } else {
-            showToast('未找到 Log out 按钮');
-        }
-    } else {
-        showToast('未找到 Settings and privacy');
-    }
-}
-
-function printAllTexts() {
-    let allTexts = [];
-    let nodes = className("android.widget.TextView").find();
-    for (let i = 0; i < nodes.length; i++) {
-        let t = nodes[i].text();
-        if (t && t.trim()) allTexts.push(t.trim());
-    }
-    showToast("当前界面文字: " + allTexts.join(" | "));
-    console.log("当前界面所有文字元素：\n" + allTexts.join("\n"));
+    // 点击设置
+    text('Settings and privacy').scrollIntoView(); sleep(500);
+    click('Log out'); sleep(1000);
+    click('Log out'); sleep(500);
+    showToast('登出完成');
 }
 
 // 主循环
@@ -194,107 +172,4 @@ while (true) {
         showToast('发生异常，重试');
     }
     sleep(500);
-}
-
-
-// <--------------------- 邮箱验证码获取 开始 --------------------->
-
-
-// 日志函数
-function log(level, message) {
-    let timestamp = new Date().toISOString();
-    let logMessage = `[${timestamp}] ${level} - ${message}`;
-    console.log(logMessage);
-    try {
-        files.append("/sdcard/tempmail_client.log", logMessage + "\n");
-    } catch (e) {
-        console.log(`日志写入失败: ${e.message}`);
-    }
-}
-
-// 设置 shortid
-function setShortid(shortid) {
-    shortid = extractShortid(config.email);
-    if (!shortid) {
-        log("ERROR", "shortid 不能为空");
-        return null;
-    }
-    try {
-        log("INFO", `设置 shortid: ${shortid}`);
-        let response = http.get(`http://1.95.133.57:3388/set_shortid?shortid=${shortid}`);
-        if (response.statusCode !== 200) {
-            log("ERROR", `设置 shortid 失败: HTTP ${response.statusCode}`);
-            return null;
-        }
-        let data = response.body.json();
-        if (data.error) {
-            log("ERROR", `设置 shortid 失败: ${data.error}`);
-            return null;
-        }
-        log("INFO", `邮箱设置成功: ${data.email}`);
-        return data.email;
-    } catch (e) {
-        log("ERROR", `设置 shortid 失败: ${e.message}`);
-        return null;
-    }
-}
-
-// 获取验证码
-function getCode(shortid, maxAttempts = 30, interval = 5000) {
-    shortid = extractShortid(config.email);
-    if (!shortid) {
-        log("ERROR", "shortid 不能为空");
-        return null;
-    }
-    log("INFO", `开始轮询验证码 for shortid: ${shortid}`);
-    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-        try {
-            let response = http.get(`http://1.95.133.57:3388/get_code?shortid=${shortid}`);
-            if (response.statusCode !== 200) {
-                log("ERROR", `获取验证码失败: HTTP ${response.statusCode}`);
-                sleep(interval);
-                continue;
-            }
-            let data = response.body.json();
-            if (data.error) {
-                log("ERROR", `获取验证码失败: ${data.error}`);
-                return null;
-            }
-            if (data.code) {
-                log("INFO", `收到验证码: ${data.code} for 邮箱: ${data.email}`);
-                toast(`验证码: ${data.code}`);
-                return data.code;
-            }
-            log("INFO", `尝试 ${attempt}/${maxAttempts}: 未找到验证码`);
-            sleep(interval);
-        } catch (e) {
-            log("ERROR", `获取验证码失败: ${e.message}`);
-            sleep(interval);
-        }
-    }
-    log("ERROR", `达到最大尝试次数 (${maxAttempts})，未找到验证码`);
-    toast("未获取到验证码");
-    return null;
-}
-
-// 提取 shortid
-function extractShortid(email) {
-    if (!email || typeof email !== 'string') {
-        log("ERROR", "邮箱地址无效");
-        return null;
-    }
-    try {
-        // 使用 split 提取 shortid
-        let parts = email.split('@');
-        if (parts.length !== 2 || parts[1] !== 'tsbytlj.com') {
-            log("ERROR", `邮箱格式错误: ${email}，预期格式为 <shortid>@tsbytlj.com`);
-            return null;
-        }
-        let shortid = parts[0];
-        log("INFO", `从邮箱 ${email} 提取 shortid: ${shortid}`);
-        return shortid;
-    } catch (e) {
-        log("ERROR", `提取 shortid 失败: ${e.message}`);
-        return null;
-    }
 }
