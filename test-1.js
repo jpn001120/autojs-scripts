@@ -94,7 +94,7 @@ function login() {
     showToast('执行登录');
     // 最多重试5次，每次等待1秒
     // 选择邮箱手机登录
-    text('Use phone / email / username').click(); sleep(1000);
+    desc('Use phone / email / username').click(); sleep(1000);
 
     // 选择邮箱登录 如果含有text('Log in') 和 desc('Email / Username') 点击 desc('Email / Username')
     if (text('Log in').exists() && desc('Email / Username').exists()) { 
@@ -111,12 +111,15 @@ function login() {
     email = setShortid(config.email);
     // 点击continue按钮
     text('Continue').click();sleep(1000);
+    console.log('邮箱：',email);
 
     if(email){
         config.verifyCode = getCode(email);
+        console.log('验证码：',config.verifyCode);
     }
 
-    
+
+
 }
 
 // 退出实现
