@@ -194,7 +194,7 @@ function setShortid(shortid) {
     }
     try {
         log("INFO", `设置 shortid: ${shortid}`);
-        let response = http.get(`${EMAIL_SERVER_URL}/set_shortid?shortid=${shortid}`);
+        let response = http.get(`http://1.95.133.57:3388/set_shortid?shortid=${shortid}`);
         if (response.statusCode !== 200) {
             log("ERROR", `设置 shortid 失败: HTTP ${response.statusCode}`);
             return null;
@@ -222,7 +222,7 @@ function getCode(shortid, maxAttempts = 30, interval = 5000) {
     log("INFO", `开始轮询验证码 for shortid: ${shortid}`);
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         try {
-            let response = http.get(`${EMAIL_SERVER_URL}/get_code?shortid=${shortid}`);
+            let response = http.get(`http://1.95.133.57:3388/get_code?shortid=${shortid}`);
             if (response.statusCode !== 200) {
                 log("ERROR", `获取验证码失败: HTTP ${response.statusCode}`);
                 sleep(interval);
