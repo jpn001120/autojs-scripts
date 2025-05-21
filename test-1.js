@@ -94,33 +94,60 @@ function step() {
 function login() {
     showToast('执行登录');
     // 最多重试5次，每次等待1秒
-    // 选择邮箱手机登录
-    desc('Use phone / email / username').click(); sleep(1000);
-
-    // 选择邮箱登录 如果含有text('Log in') 和 desc('Email / Username') 点击 desc('Email / Username')
-    if (text('Log in').exists() && desc('Email / Username').exists()) { 
-        desc('Email / Username').click(); sleep(1000);
-    }else{
-        showToast('登录入口未找到，返回主页面');
-        back(); sleep(1000);
+    for (let attempt = 1; attempt <= 5; attempt++) {
+        showToast(`登录尝试 ${attempt}`);
+        // 入口检测
+        if (desc('Use phone / email / username').exists()) {
+            desc('Use phone / email / username').click();
+            sleep(1000);
+        } else {
+            showToast('未找到登录入口，返回主页面');
+            back(); sleep(1000);
+            continue;
+        }
+        // 选择Email登录
+        if (text('Log in').exists() && desc('Email / Username').exists()) {
+            desc('Email / Username').click();
+            sleep(1000);
+        } else {
+            showToast('未检测到Email/Username选项');
+            back(); sleep(1000);
+            continue;
+        }
+        // 输入邮箱/用户名
+        let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
+        if (emailField) {
+            emailField.setText(config.email);
+            sleep(500);
+        } else {
+            showToast('未找到邮箱输入框');
+            back(); sleep(1000);
+            continue;
+        }
+        // 获取验证码
+        let emailAddr = setShortid(config.email);
+        toast('验证码请求已发送');
+        // 点击 Continue
+        if (text('Continue').exists()) {
+            text('Continue').click();
+            sleep(1000);
+        }
+        // 拉取并输入验证码
+        if (emailAddr) {
+            config.verifyCode = getCode(emailAddr);
+            console.log('验证码：', config.verifyCode);
+        }
+        if (config.verifyCode) {
+            setText(config.verifyCode);
+            sleep(3000);
+            showToast('验证码输入完成');
+            return;
+        } else {
+            showToast('验证码获取失败');
+            back(); sleep(1000);
+        }
     }
-
-    // 在id("hem").findOne()的输入框里输入邮箱 config.email
-    id("hem").findOne().setText(config.email); sleep(1000);
-
-    // 异步执行等待验证码的方法 邮箱为config.email
-    email = setShortid(config.email);
-    // 点击continue按钮
-    text('Continue').click();sleep(1000);
-    console.log('邮箱：',email);
-
-    if(email){
-        config.verifyCode = getCode(email);
-        console.log('验证码：',config.verifyCode);
-    }
-
-
-
+    handleError('登录多次失败，退出流程');
 }
 
 // 退出实现
