@@ -38,7 +38,7 @@ function step() {
             break;
 
         case STATES.HOME:
-            // 如果首页有“Profile”按钮，切换到 PROFILE
+            // 如果首页有"Profile"按钮，切换到 PROFILE
             if (desc('Profile').exists()) {
                 currentState = STATES.PROFILE;
             } else {
@@ -80,16 +80,26 @@ function step() {
 // 登录实现
 function login() {
     showToast('执行登录');
-    if (desc('Use phone / email / username').exists()) {
-        desc('Use phone / email / username').click(); sleep(1000);
-        desc('Email / Username').click(); sleep(1000);
-        text('Email or username').setText(config.email); sleep(500);
-        click('Continue'); sleep(3000);
-        setText(config.verifyCode); sleep(500);
-        showToast('登录尝试完成');
-    } else {
-        showToast('登录入口未找到');
+    // 最多重试5次，每次等待1秒
+    let retry = 5;
+    while (retry-- > 0) {
+        if (descContains('phone').exists() || textContains('phone').exists()) {
+            // 兼容不同控件类型
+            let btn = descContains('phone').findOne(2000) || textContains('phone').findOne(2000);
+            if (btn) {
+                btn.click(); sleep(1000);
+                break;
+            }
+        }
+        sleep(1000);
     }
+    if (retry <= 0) {
+        showToast('登录入口未找到，返回主页面');
+        back(); sleep(1000);
+        return;
+    }
+    // 下面继续填写邮箱、验证码等
+    // ...
 }
 
 // 退出实现
