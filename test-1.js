@@ -111,7 +111,12 @@ function login() {
         return;
     }
     // 下面继续填写邮箱、验证码等
-    // ...
+    // 如果含有text('Log in') 和 desc('Email / Username') 点击 desc('Email / Username')
+    if (text('Log in').exists() && desc('Email / Username').exists()) { 
+        desc('Email / Username').click(); sleep(1000);
+    }
+
+    // 
 }
 
 // 退出实现
