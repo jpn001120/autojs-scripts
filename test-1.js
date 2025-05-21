@@ -38,11 +38,11 @@ function step() {
             break;
 
         case STATES.HOME:
-            // 如果首页有"Profile"按钮，切换到 PROFILE
             if (desc('Profile').exists()) {
                 currentState = STATES.PROFILE;
             } else {
                 showToast('未在首页检测到 Profile，尝试回退');
+                printAllTexts();
                 back(); sleep(1000);
             }
             break;
@@ -74,7 +74,11 @@ function step() {
             showToast('所有流程完成');
             exit();
             break;
-        sleep(1000);
+        default:
+            showToast('无法判断当前状态，打印界面文字');
+            printAllTexts();
+            sleep(2000); // 等待你人工分析
+            break;
     }
 }
 
@@ -106,11 +110,34 @@ function login() {
 // 退出实现
 function logout() {
     showToast('执行登出');
-    // 点击设置
-    text('Settings and privacy').scrollIntoView(); sleep(500);
-    click('Log out'); sleep(1000);
-    click('Log out'); sleep(500);
-    showToast('登出完成');
+    // 尝试滚动查找"Settings and privacy"
+    let setting = text("Settings and privacy").findOne(5000);
+    if (setting) {
+        setting.click(); sleep(500);
+        // 继续后续操作
+        if (text("Log out").exists()) {
+            click("Log out"); sleep(1000);
+            if (text("Log out").exists()) {
+                click("Log out"); sleep(500);
+            }
+            showToast('登出完成');
+        } else {
+            showToast('未找到 Log out 按钮');
+        }
+    } else {
+        showToast('未找到 Settings and privacy');
+    }
+}
+
+function printAllTexts() {
+    let allTexts = [];
+    let nodes = className("android.widget.TextView").find();
+    for (let i = 0; i < nodes.length; i++) {
+        let t = nodes[i].text();
+        if (t && t.trim()) allTexts.push(t.trim());
+    }
+    showToast("当前界面文字: " + allTexts.join(" | "));
+    console.log("当前界面所有文字元素：\n" + allTexts.join("\n"));
 }
 
 // 主循环
