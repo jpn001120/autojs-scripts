@@ -65,6 +65,7 @@ function universalClick(identifier, desc, timeout = 3000) {
 }
 // 打印控件树的递归函数
 function printUIInfo(node, depth = 0) {
+    console.log("printUIInfo()")
     if (!node) return;
     let prefix = "  ".repeat(depth);
     let info = `${prefix}${node.className()}  [text="${node.text()}", id="${node.id()}", desc="${node.desc()}"]`;
