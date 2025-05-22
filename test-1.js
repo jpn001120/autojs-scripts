@@ -144,8 +144,8 @@ function step() {
             break;
 
         case STATES.LOGIN_AGAIN:
-            showToast('状态: LOGIN_AGAIN，点击Log in按钮进入登录流程');
-            if (safeClick(text('Log in'), 'Log in 按钮')) {
+            showToast('状态: LOGIN_AGAIN，点击Add another account按钮进入登录流程');
+            if (safeClick(text('Add another account'), 'Log in 按钮')) {
                 sleep(1500);
                 currentState = STATES.LOGIN_FLOW;
             } else {
@@ -243,7 +243,7 @@ function printAllTexts() {
 }
 
 // 主循环
-// console.show();
+console.show();
 showToast('脚本启动 - 状态机模式');
 while (true) {
     try { step(); } catch (e) { console.error(e); showToast('脚本异常，重试'); }
