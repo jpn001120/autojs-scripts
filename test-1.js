@@ -152,19 +152,14 @@ function login() {
     setClip(config.email); sleep(300);
     click(471, 1358); sleep(800); // 粘贴邮箱
     // 获取根节点（UI 控件树的顶层）
-    let root = currentActivity().getWindow().getDecorView().getRootView();
-    let uiObject = root ? UiObject(root) : null;
+    // 尝试查找任意可见节点作为起点
+let rootNode = selector().findOne(5000);  // 最多等待 5 秒
 
-    if (uiObject) {
-        printUIInfo(uiObject);
-    } else {
-        console.error("无法获取根节点！");
-    }
-    // 执行一次返回 收起键盘
-    back();
-    if (!retryAction(() => universalClick('Continue', 'Continue 按钮'), 3)) {
-        return handleError('无法提交邮箱');
-    }
+if (rootNode) {
+    printUIInfo(rootNode);
+} else {
+    console.error("未能获取到控件树！");
+}
     sleep(1000);
 
     // 步骤4：获取并输入验证码
