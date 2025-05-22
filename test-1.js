@@ -24,20 +24,6 @@ function log(message) {
     if (config.enableToast) toast(message);
 }
 
-// 封装安全点击
-function safeClick(selector, desc, timeout = 3000) {
-    log(`尝试点击: ${desc}`);
-    let el = selector.findOne(timeout);
-    if (el && el.enabled()) {
-        el.click();
-        log(`点击成功: ${desc}`);
-        return true;
-    } else {
-        log(`点击失败: ${desc}`);
-        return false;
-    }
-}
-
 // 通用点击函数：只需指定一个选择器值（text/desc/id）
 function universalClick(identifier, desc, timeout = 3000) {
     log(`尝试点击: ${desc}`);
@@ -137,13 +123,13 @@ function login() {
     printAllTexts(); // 记录初始界面状态
 
     // 步骤1：点击“Use phone / email / username”
-    if (!retryAction(() => safeClick(desc('Use phone / email / username'), 'Use phone/email 按钮'), 3)) {
+    if (!retryAction(() => safeClick(desc('Use phone / email / username')))) {
         return handleError('无法进入登录界面');
     }
     sleep(1000);
 
     // 步骤2：点击“Email / Username”
-    if (!retryAction(() => safeClick(desc('Email / Username'), 'Email/Username 按钮'), 3)) {
+    if (!retryAction(() => safeClick(desc('Email / Username')))) {
         return handleError('无法选择邮箱登录');
     }
     sleep(1000);
@@ -199,9 +185,9 @@ function logout() {
     let settingBtn = text('Settings and privacy').scrollIntoView(3000);
     if (!settingBtn) { log('未找到 Settings and privacy'); return; }
     settingBtn.click(); sleep(1000);
-    if (safeClick(text('Log out'), 'Log out 按钮')) {
+    if (safeClick(text('Log out'))) {
         sleep(500);
-        safeClick(text('Log out'), '确认 Log out 按钮');
+        safeClick(text('Log out'));
         log('登出完成');
     }
 }
@@ -340,13 +326,13 @@ function step() {
 
         case STATES.PROFILE:
             log('状态: PROFILE');
-            safeClick(desc('Profile'), 'Profile 按钮'); sleep(2000);
+            safeClick(desc('Profile')); sleep(2000);
             if (text('Log in to TikTok').exists() && desc('Use phone / email / username').exists()) {
                 log('检测到登录界面');
                 currentState = STATES.LOGIN_FLOW;
             } else if (desc('Add another account').exists()) {
                 log('检测到已登录状态，点击 Add another account');
-                safeClick(desc('Add another account'), 'Add another account 按钮');
+                safeClick(desc('Add another account'));
                 sleep(1500);
                 currentState = STATES.LOGIN_FLOW;
             } else if (text('Settings and privacy').exists()) {
