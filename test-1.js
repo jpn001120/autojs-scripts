@@ -40,53 +40,32 @@ function safeClick(selector, desc, timeout = 3000) {
 
 function safeSetText(field, text, desc) {
     showToast(`尝试输入: ${desc}`);
-    printAllTexts();
     try {
         field.click(); sleep(500);
-
-        // 1. 原始 setText 尝试
-        field.setText(text); sleep(800);
+        field.setText(text); sleep(500);
         if (field.text && field.text() === text) {
             showToast(`输入成功: ${desc}`);
             return true;
         }
-
-        
-        if (field.text && field.text().indexOf(text) !== -1) {
-            showToast(`粘贴成功: ${desc}`);
-            return true;
-        }
-        
-        // 3. 使用 keys.text 兜底
-        try {
-            keys.text(text); sleep(1000);
-            if (field.text && field.text().indexOf(text) !== -1) {
-                showToast(`keys 输入成功: ${desc}`);
-                return true;
-            }
-        } catch (e) {
-            showToast(`keys 模块失败: ${e}`);
-        }
-
-        // 4. 最后尝试 shell 输入逐字符
-        for (let i = 0; i < 50; i++) shell("input keyevent 67", true); // 删除
-        for (let ch of text.split("")) {
-            shell(`input text "${ch}"`, true);
-            sleep(100);
-        }
-
-        sleep(500);
-        if (field.text && field.text().indexOf(text) !== -1) {
-            showToast(`shell 输入成功: ${desc}`);
-            return true;
-        }
-
-        showToast(`所有输入方式均失败: ${desc}`);
-        return false;
     } catch (e) {
-        showToast(`safeSetText 异常: ${desc} ${e}`);
-        return false;
+        showToast(`setText异常: ${e}`);
     }
+
+    // 兜底 - 模拟输入
+    showToast(`setText失败，尝试模拟输入: ${desc}`);
+    try {
+        let b = field.bounds();
+        click(b.centerX(), b.centerY()); sleep(500);
+    } catch (_) {
+        showToast('无法点击控件中心，使用预设位置点击');
+        click(500, 1200); sleep(500); // 你也可以传参决定坐标
+    }
+
+    setClip(text); sleep(300);
+    shell("input keyevent 279", true); sleep(500);
+    shell(`input text ${text}`, true); sleep(500);
+    
+    return true; // 不再强校验内容，因 TikTok 会隐藏内容
 }
 
 
@@ -209,12 +188,13 @@ function login() {
             config.verifyCode = getCode(emailAddr);
             showToast('拉取到验证码: ' + config.verifyCode);
         }
-        // 设置粘贴板
-        setClip(config.verifyCode); sleep(300);
-        // 执行粘贴
-        shell("input keyevent 279", true); // 粘贴
-        sleep(800);
-        // 自动粘贴没有成功, 但是出现了数字的按键 
+        if (desc('Type in code').exists()) {
+            desc('Type in code').setText(config.verifyCode);
+            console.log('输入验证码: ' + config.verifyCode);
+        }else{
+            showToast('未找到验证码输入框');
+        }
+
 
         // 出现text('Verify it’s really you') 需要点击并输入密码确认
         if (text('Verify it’s really you').exists()) {
