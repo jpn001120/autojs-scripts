@@ -40,6 +40,7 @@ function safeClick(selector, desc, timeout = 3000) {
 
 function safeSetText(field, text, desc) {
     showToast(`尝试输入: ${desc}`);
+    printAllTexts();
     try {
         field.click(); sleep(500);
 
