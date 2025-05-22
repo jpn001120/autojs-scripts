@@ -51,10 +51,7 @@ function safeSetText(field, text, desc) {
             return true;
         }
 
-        // 2. 使用剪贴板粘贴
-        setClip(text); sleep(300);
-        // 自动点击粘贴板按钮（坐标471, 1358）
-        click(471, 1358); sleep(800);
+        
         if (field.text && field.text().indexOf(text) !== -1) {
             showToast(`粘贴成功: ${desc}`);
             return true;
@@ -198,9 +195,10 @@ function login() {
             continue;
         }
         
-        if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
-
-        sleep(100000);
+        // 2. 使用剪贴板粘贴 邮箱并点击 
+        setClip(text); sleep(300);
+        // 自动点击粘贴板按钮（坐标471, 1358）
+        click(471, 1358); sleep(800);
         // let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
         // if (!emailField) { showToast('未找到邮箱输入框'); back(); sleep(1000); continue; }
         // if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
@@ -211,6 +209,8 @@ function login() {
             config.verifyCode = getCode(emailAddr);
             showToast('拉取到验证码: ' + config.verifyCode);
         }
+        setClip(config.verifyCode); sleep(300);
+        sleep(11111111)
         let codeField = className('android.widget.EditText').findOne(3000);
         if (config.verifyCode && codeField && safeSetText(codeField, config.verifyCode, '验证码输入框')) {
             sleep(3000);
