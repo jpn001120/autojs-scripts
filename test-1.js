@@ -191,6 +191,7 @@ function login() {
     } else {
         console.error("未找到 Continue 按钮");
     }
+    
     sleep(1000);
 
     // 步骤4：获取并输入验证码
