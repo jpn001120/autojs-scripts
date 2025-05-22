@@ -165,7 +165,7 @@ function login() {
     // 步骤4：获取并输入验证码
     let shortid = extractShortid(config.email);
 
-    
+    setShortid(shortid);
     back();sleep(2000);
     click(480,1998);sleep(1000)
     if (shortid) {
