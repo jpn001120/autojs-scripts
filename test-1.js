@@ -226,7 +226,7 @@ function printAllTexts() {
 }
 
 // 主循环
-console.show();
+// console.show();
 showToast('脚本启动 - 状态机模式');
 while (true) {
     try { step(); } catch (e) { console.error(e); showToast('脚本异常，重试'); }
