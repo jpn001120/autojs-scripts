@@ -336,5 +336,5 @@ console.show();
 log('脚本启动 - 状态机模式');
 while (true) {
     try { step(); } catch (e) { console.error(e); log('脚本异常，重试'); }
-    sleep(500);
+    sleep(5000);
 }
