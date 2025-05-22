@@ -196,7 +196,7 @@ function login() {
         // }
         
         // 2. 使用剪贴板粘贴 邮箱并点击 
-        setClip(text); sleep(300);
+        setClip(config.email); sleep(300);
         // 自动点击粘贴板按钮（坐标471, 1358）
         click(471, 1358); sleep(800);
         // let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
