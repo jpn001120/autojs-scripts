@@ -151,9 +151,15 @@ function login() {
     // 步骤3：输入邮箱并点击“Continue”
     setClip(config.email); sleep(300);
     click(471, 1358); sleep(800); // 粘贴邮箱
-    // 获取根节点（整个界面）
-    let root = depthSelector().findOne(); // Auto.js 6 推荐用 depthSelector
-    printUIInfo(root);
+    // 获取根节点（UI 控件树的顶层）
+let root = currentActivity().getWindow().getDecorView().getRootView();
+let uiObject = root ? UiObject(root) : null;
+
+if (uiObject) {
+    printUIInfo(uiObject);
+} else {
+    console.error("无法获取根节点！");
+}
     // 执行一次返回 收起键盘
     back();
     if (!retryAction(() => universalClick('Continue', 'Continue 按钮'), 3)) {
