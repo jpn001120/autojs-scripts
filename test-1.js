@@ -63,6 +63,10 @@ function universalClick(identifier, desc, timeout = 3000) {
         return false;
     }
 }
+function depthSelector(depth) {
+    return selector().depth(depth);
+}
+
 // 打印控件树的递归函数
 function printUIInfo(node, depth = 0) {
     console.log("printUIInfo()")
