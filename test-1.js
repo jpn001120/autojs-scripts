@@ -6,6 +6,7 @@ const STATES = {
     PROFILE: 'PROFILE',
     LOGIN_FLOW: 'LOGIN_FLOW',
     LOGOUT_FLOW: 'LOGOUT_FLOW',
+    LOGIN_AGAIN: 'LOGIN_AGAIN',
     DONE: 'DONE'
 };
 
@@ -130,12 +131,28 @@ function step() {
             if (text('Log in to TikTok').exists() && desc('Use phone / email / username').exists()) {
                 showToast('检测到登录界面');
                 currentState = STATES.LOGIN_FLOW;
+            } else if (text('Add another account').exists() && text('Welcome back').exists()) {
+                showToast('检测到退出界面，准备重新登录');
+                currentState = STATES.LOGIN_AGAIN;
             } else if (desc('Add another account').exists()) {
                 showToast('检测到已登录状态');
                 currentState = STATES.LOGOUT_FLOW;
             } else {
                 showToast('PROFILE: 未识别界面，打印文字');
                 printAllTexts(); sleep(2000);
+            }
+            break;
+
+        case STATES.LOGIN_AGAIN:
+            showToast('状态: LOGIN_AGAIN，点击Log in按钮进入登录流程');
+            if (safeClick(text('Log in'), 'Log in 按钮')) {
+                sleep(1500);
+                currentState = STATES.LOGIN_FLOW;
+            } else {
+                showToast('未找到Log in按钮，打印界面文字');
+                printAllTexts();
+                sleep(2000);
+                currentState = STATES.DONE;
             }
             break;
 
