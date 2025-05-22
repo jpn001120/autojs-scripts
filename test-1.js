@@ -163,25 +163,22 @@ function login() {
     let codeField = desc('Type in code').findOne(3000);
     if (codeField && config.verifyCode) {
         safeSetText(codeField, config.verifyCode, '验证码输入框');
-        sleep(10000); // 等待验证码验证
     } else {
         return handleError('未找到验证码输入框或未获取到验证码');
     }
 
     // 步骤5：处理“Verify it’s really you”界面
-    if (text('Verify it’s really you').exists()) {
-        click(471, 666); sleep(1000); // 点击验证按钮
-        click(448, 1911); sleep(1000); // 点击next
+    click(471, 666); sleep(1000); // 点击验证按钮
+    click(448, 1911); sleep(1000); // 点击next
 
-        let passwordField = className('EditText').findOne(5000);
-        if (passwordField && safeSetText(passwordField, config.password, '密码输入框')) {
-            sleep(800);
-            if (!retryAction(() => universalClick('Next', 'Next 按钮'), 3)) {
-                return handleError('无法提交密码');
-            }
-        } else {
-            return handleError('未找到密码输入框');
+    let passwordField = className('EditText').findOne(5000);
+    if (passwordField && safeSetText(passwordField, config.password, '密码输入框')) {
+        sleep(800);
+        if (!retryAction(() => universalClick('Next', 'Next 按钮'), 3)) {
+            return handleError('无法提交密码');
         }
+    } else {
+        return handleError('未找到密码输入框');
     }
 
     // 检查登录是否成功
