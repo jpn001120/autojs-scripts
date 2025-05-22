@@ -6,330 +6,211 @@ const STATES = {
     PROFILE: 'PROFILE',
     LOGIN_FLOW: 'LOGIN_FLOW',
     LOGOUT_FLOW: 'LOGOUT_FLOW',
-    LOGIN_AGAIN: 'LOGIN_AGAIN',
     DONE: 'DONE'
 };
 
 // 配置
 const config = {
     packageName: 'com.zhiliaoapp.musically',
-    email: 'x-uz0uh7w@tsbytlj.com', //  x-uz0uh7w@tsbytlj.com 98UWv8Rw4xuDG.
-
-    password:'98UWv8Rw4xuDG.',
+    email: 'x-uz0uh7w@tsbytlj.com',
+    password: '98UWv8Rw4xuDG.',
     verifyCode: '',
-    enableToast: false
+    enableToast: true // 控制是否显示 toast
 };
 
-// 吐司与日志
-function showToast(msg) {
-    if (config.enableToast) toast(msg);
-    console.log(msg);
+// 统一日志函数
+function log(message) {
+    console.log(message);
+    if (config.enableToast) toast(message);
 }
 
 // 封装安全点击
 function safeClick(selector, desc, timeout = 3000) {
-    showToast(`尝试点击: ${desc}`);
+    log(`尝试点击: ${desc}`);
     let el = selector.findOne(timeout);
     if (el && el.enabled()) {
         el.click();
-        showToast(`点击成功: ${desc}`);
+        log(`点击成功: ${desc}`);
         return true;
     } else {
-        showToast(`点击失败: ${desc}`);
+        log(`点击失败: ${desc}`);
         return false;
     }
 }
 
-function safeSetText(field, text, desc) {
-    showToast(`尝试输入: ${desc}`);
-    try {
-        field.click(); sleep(500);
-        field.setText(text); sleep(500);
-        if (field.text && field.text() === text) {
-            showToast(`输入成功: ${desc}`);
-            return true;
-        }
-    } catch (e) {
-        showToast(`setText异常: ${e}`);
-    }
-
-    // 兜底 - 模拟输入
-    showToast(`setText失败，尝试模拟输入: ${desc}`);
-    try {
-        let b = field.bounds();
-        click(b.centerX(), b.centerY()); sleep(500);
-    } catch (_) {
-        showToast('无法点击控件中心，使用预设位置点击');
-        click(500, 1200); sleep(500); // 你也可以传参决定坐标
-    }
-
-    setClip(text); sleep(300);
-    shell("input keyevent 279", true); sleep(500);
-    shell(`input text ${text}`, true); sleep(500);
-    
-    return true; // 不再强校验内容，因 TikTok 会隐藏内容
-}
-
-
-
-// 替代方案：通过 shell 输入文本（兼容英文符号和空格）
-function shellInputText(text) {
-    let encoded = encodeURIComponent(text).replace(/%/g, '%25');
-    shell(`input text "${encoded}"`, true);
-}
-
-
-// 状态机核心
-let currentState = STATES.CHECK_LAUNCH;
-
-function step() {
-    switch (currentState) {
-        case STATES.CHECK_LAUNCH:
-            showToast('状态: CHECK_LAUNCH');
-            if (currentPackage() !== config.packageName) {
-                showToast('未检测到 TikTok，启动应用');
-                app.launchPackage(config.packageName);
-                sleep(3000);
-            }
-            currentState = STATES.HOME;
-            break;
-
-        case STATES.HOME:
-            showToast('状态: HOME');
-            if (desc('Profile').exists()) {
-                currentState = STATES.PROFILE;
-            } else {
-                showToast('HOME: 未检测到 Profile 按钮，回退');
-                back(); sleep(1000);
-            }
-            break;
-
-        case STATES.PROFILE:
-            showToast('状态: PROFILE');
-            safeClick(desc('Profile'), 'Profile 按钮'); sleep(2000);
-            if (text('Log in to TikTok').exists() && desc('Use phone / email / username').exists()) {
-                showToast('检测到登录界面');
-                currentState = STATES.LOGIN_FLOW;
-            } else if (text('Add another account').exists() && text('Welcome back').exists()) {
-                showToast('检测到退出界面，准备重新登录');
-                currentState = STATES.LOGIN_AGAIN;
-            } else if (desc('Add another account').exists()) {
-                showToast('检测到已登录状态');
-                currentState = STATES.LOGOUT_FLOW;
-            } else {
-                showToast('PROFILE: 未识别界面，打印文字');
-                printAllTexts(); sleep(2000);
-            }
-            break;
-
-        case STATES.LOGIN_AGAIN:
-            showToast('状态: LOGIN_AGAIN，点击Add another account按钮进入登录流程');
-            if (safeClick(text('Add another account'), 'Log in 按钮')) {
-                sleep(1500);
-                currentState = STATES.LOGIN_FLOW;
-            } else {
-                showToast('未找到Log in按钮，打印界面文字');
-                printAllTexts();
-                sleep(2000);
-                currentState = STATES.DONE;
-            }
-            break;
-
-        case STATES.LOGIN_FLOW:
-            showToast('状态: LOGIN_FLOW');
-            login();
-            currentState = STATES.DONE;
-            break;
-
-        case STATES.LOGOUT_FLOW:
-            showToast('状态: LOGOUT_FLOW');
-            logout();
-            currentState = STATES.DONE;
-            break;
-
-        case STATES.DONE:
-            showToast('状态: DONE，脚本结束');
-            exit();
-            break;
-
-        default:
-            showToast('未知状态，退出');
-            exit();
-    }
-}
 // 通用点击函数：只需指定一个选择器值（text/desc/id）
 function universalClick(identifier, desc, timeout = 3000) {
-    showToast(`尝试点击: ${desc}`);
+    log(`尝试点击: ${desc}`);
     let el = text(identifier).findOne(timeout)
         || desc(identifier).findOne(timeout)
         || id(identifier).findOne(timeout);
     if (!el) {
-        showToast(`未找到元素: ${desc}`);
+        log(`未找到元素: ${desc}`);
         return false;
     }
     if (el.clickable()) {
         el.click();
-        showToast(`点击成功: ${desc}`);
+        log(`点击成功: ${desc}`);
         return true;
     }
     try {
         let bounds = el.bounds();
         click(bounds.centerX(), bounds.centerY());
-        showToast(`使用坐标点击: ${desc}`);
+        log(`使用坐标点击: ${desc}`);
         return true;
     } catch (e) {
-        showToast(`点击异常: ${e}`);
+        log(`点击异常: ${e}`);
         return false;
     }
 }
-// 登录实现
-function login() {
-    showToast('开始登录流程');
-    for (let attempt = 1; attempt <= 5; attempt++) {
-        showToast(`登录尝试 ${attempt}`);
-        // 入口
-        if (!safeClick(desc('Use phone / email / username'), 'Use phone/email 按钮')) continue;
-        sleep(1000);
-        if (!safeClick(desc('Email / Username'), 'Email/Username 按钮')) continue;
-        sleep(1000);
-        // 获取邮箱输入框（第一个 EditText）
-        // let emailField = id("eje").findOne();
-        // if (!emailField) {
-        //     showToast('未找到邮箱输入框'); 
-        //     back(); sleep(1000);
-        //     continue;
-        // }
-        
-        // 2. 使用剪贴板粘贴 邮箱并点击 
-        setClip(config.email); sleep(300);
-        // 自动点击粘贴板按钮（坐标471, 1358）
-        click(471, 1358); sleep(800);
-        // let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
-        // if (!emailField) { showToast('未找到邮箱输入框'); back(); sleep(1000); continue; }
-        // if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
-        let emailAddr = setShortid(config.email);
-        showToast('短ID 设置: ' + emailAddr);
-        universalClick('Continue', 'Continue 按钮'); sleep(1000); // 
-        click(418, 1135); sleep(1000);
-        if (emailAddr) {
-            config.verifyCode = getCode(emailAddr);
-            showToast('拉取到验证码: ' + config.verifyCode);
-        }
-        if (desc('Type in code').exists()) {
-            desc('Type in code').setText(config.verifyCode);
-            console.log('输入验证码: ' + config.verifyCode);sleep(5000);
-        }else{
-            showToast('未找到验证码输入框');
-            
-        }
 
-
-        // 出现text('Verify it’s really you') 需要点击并输入密码确认
-        printAllTexts();sleep(10000);
-        // 暂时无法判断界面的元素, 所 444 649 点击verify password 然后点击next  
-        click(471, 666);sleep(1000);
-        click(468, 1937);sleep(1000);
-        // 找到className('EditText') 然后输入config.password
-        if(className('EditText').findOne(5000)){
-            className('EditText').setText(config.password);sleep(800)
-        }else{
-            console.log('未找到密码输入框')
+// 封装安全输入
+function safeSetText(field, text, desc) {
+    log(`尝试输入: ${desc}`);
+    try {
+        field.click(); sleep(500);
+        field.setText(text); sleep(500);
+        if (field.text && field.text() === text) {
+            log(`输入成功: ${desc}`);
+            return true;
         }
-
-        // 点击text('Next') 按钮
-        if(text('Next').findOne(3000)){
-            text('Next').click();sleep(800)
-        }else{
-            console.log('未找到密码输入框')
-        }
-
-        sleep(11111111)
-        let codeField = className('android.widget.EditText').findOne(3000);
-        if (config.verifyCode && codeField && safeSetText(codeField, config.verifyCode, '验证码输入框')) {
-            sleep(3000);
-            showToast('登录完成');
-            return;
-        }
-        showToast('本次尝试失败，回退'); back(); sleep(1000);
+    } catch (e) {
+        log(`setText异常: ${e}`);
     }
-    handleError('登录多次失败');
-}
-
-// 退出实现
-function logout() {
-    showToast('开始登出流程');
-    let settingBtn = text('Settings and privacy').scrollIntoView(3000);
-    if (!settingBtn) { showToast('未找到 Settings and privacy'); return; }
-    settingBtn.click(); sleep(1000);
-    if (safeClick(text('Log out'), 'Log out 按钮')) {
-        sleep(500);
-        safeClick(text('Log out'), '确认 Log out 按钮');
-        showToast('登出完成');
+    // 兜底 - 模拟输入
+    log(`setText失败，尝试模拟输入: ${desc}`);
+    try {
+        let b = field.bounds();
+        click(b.centerX(), b.centerY()); sleep(500);
+    } catch (_) {
+        log('无法点击控件中心，使用预设位置点击');
+        click(500, 1200); sleep(500); // 你也可以传参决定坐标
     }
+    setClip(text); sleep(300);
+    shell("input keyevent 279", true); sleep(500);
+    shell(`input text ${text}`, true); sleep(500);
+    return true; // 不再强校验内容，因 TikTok 会隐藏内容
 }
 
 // 打印所有文字
 function printAllTexts() {
     let nodes = className('android.widget.TextView').find();
     let texts = nodes.map(n => n.text() && n.text().trim()).filter(t => t);
-    showToast('界面文字: ' + texts.join(' | '));
+    log('界面文字: ' + texts.join(' | '));
     console.log('界面文字列表:\n' + texts.join('\n'));
 }
 
-// 主循环
-console.show();
-showToast('脚本启动 - 状态机模式');
-while (true) {
-    try { step(); } catch (e) { console.error(e); showToast('脚本异常，重试'); }
-    sleep(500);
+// 重试辅助函数
+function retryAction(action, maxAttempts = 3, interval = 1000) {
+    for (let i = 1; i <= maxAttempts; i++) {
+        if (action()) return true;
+        log(`尝试 ${i}/${maxAttempts} 失败，重试`);
+        sleep(interval);
+    }
+    return false;
 }
 
+// 错误处理函数
+function handleError(message) {
+    log(message);
+    back(); sleep(1000);
+}
 
-// <--------------------- 邮箱验证码获取 开始 --------------------->
+// 登录实现
+function login() {
+    log('开始登录流程');
+    printAllTexts(); // 记录初始界面状态
 
+    // 步骤1：点击“Use phone / email / username”
+    if (!retryAction(() => safeClick(desc('Use phone / email / username'), 'Use phone/email 按钮'), 3)) {
+        return handleError('无法进入登录界面');
+    }
+    sleep(1000);
 
-// 日志函数
-function log(level, message) {
-    let timestamp = new Date().toISOString();
-    let logMessage = `[${timestamp}] ${level} - ${message}`;
-    console.log(logMessage);
-    try {
-        files.append("/sdcard/tempmail_client.log", logMessage + "\n");
-    } catch (e) {
-        console.log(`日志写入失败: ${e.message}`);
+    // 步骤2：点击“Email / Username”
+    if (!retryAction(() => safeClick(desc('Email / Username'), 'Email/Username 按钮'), 3)) {
+        return handleError('无法选择邮箱登录');
+    }
+    sleep(1000);
+
+    // 步骤3：输入邮箱并点击“Continue”
+    setClip(config.email); sleep(300);
+    click(471, 1358); sleep(800); // 粘贴邮箱
+    if (!retryAction(() => universalClick('Continue', 'Continue 按钮'), 3)) {
+        return handleError('无法提交邮箱');
+    }
+    sleep(1000);
+
+    // 步骤4：获取并输入验证码
+    let shortid = extractShortid(config.email);
+    if (shortid) {
+        config.verifyCode = getCode(shortid);
+        log('拉取到验证码: ' + config.verifyCode);
+    }
+    let codeField = desc('Type in code').findOne(3000);
+    if (codeField && config.verifyCode) {
+        safeSetText(codeField, config.verifyCode, '验证码输入框');
+        sleep(5000); // 等待验证码验证
+    } else {
+        return handleError('未找到验证码输入框或未获取到验证码');
+    }
+
+    // 步骤5：处理“Verify it’s really you”界面
+    if (text('Verify it’s really you').exists()) {
+        click(471, 666); sleep(1000); // 点击验证按钮
+        let passwordField = className('android.widget.EditText').findOne(5000);
+        if (passwordField && safeSetText(passwordField, config.password, '密码输入框')) {
+            sleep(800);
+            if (!retryAction(() => universalClick('Next', 'Next 按钮'), 3)) {
+                return handleError('无法提交密码');
+            }
+        } else {
+            return handleError('未找到密码输入框');
+        }
+    }
+
+    // 检查登录是否成功
+    if (desc('Profile').findOne(5000)) {
+        log('登录成功');
+        printAllTexts(); // 记录登录后界面状态
+    } else {
+        return handleError('登录失败，未能进入Profile界面');
     }
 }
 
-// 设置 shortid
-function setShortid(shortid) {
-    shortid = extractShortid(config.email);
-    if (!shortid) {
-        log("ERROR", "shortid 不能为空");
+// 退出实现
+function logout() {
+    log('开始登出流程');
+    let settingBtn = text('Settings and privacy').scrollIntoView(3000);
+    if (!settingBtn) { log('未找到 Settings and privacy'); return; }
+    settingBtn.click(); sleep(1000);
+    if (safeClick(text('Log out'), 'Log out 按钮')) {
+        sleep(500);
+        safeClick(text('Log out'), '确认 Log out 按钮');
+        log('登出完成');
+    }
+}
+
+// 邮箱验证码获取相关函数
+function extractShortid(email) {
+    if (!email || typeof email !== 'string') {
+        log("ERROR", "邮箱地址无效");
         return null;
     }
     try {
-        log("INFO", `设置 shortid: ${shortid}`);
-        let response = http.get(`http://1.95.133.57:3388/set_shortid?shortid=${shortid}`);
-        if (response.statusCode !== 200) {
-            log("ERROR", `设置 shortid 失败: HTTP ${response.statusCode}`);
+        let parts = email.split('@');
+        if (parts.length !== 2 || parts[1] !== 'tsbytlj.com') {
+            log("ERROR", `邮箱格式错误: ${email}，预期格式为 <shortid>@tsbytlj.com`);
             return null;
         }
-        let data = response.body.json();
-        if (data.error) {
-            log("ERROR", `设置 shortid 失败: ${data.error}`);
-            return null;
-        }
-        log("INFO", `邮箱设置成功: ${data.email}`);
-        return data.email;
+        return parts[0];
     } catch (e) {
-        log("ERROR", `设置 shortid 失败: ${e.message}`);
+        log("ERROR", `提取 shortid 失败: ${e.message}`);
         return null;
     }
 }
 
-// 获取验证码
 function getCode(shortid, maxAttempts = 30, interval = 5000) {
-    shortid = extractShortid(config.email);
     if (!shortid) {
         log("ERROR", "shortid 不能为空");
         return null;
@@ -365,24 +246,78 @@ function getCode(shortid, maxAttempts = 30, interval = 5000) {
     return null;
 }
 
-// 提取 shortid
-function extractShortid(email) {
-    if (!email || typeof email !== 'string') {
-        log("ERROR", "邮箱地址无效");
-        return null;
+// 状态机核心
+let currentState = STATES.CHECK_LAUNCH;
+
+function step() {
+    switch (currentState) {
+        case STATES.CHECK_LAUNCH:
+            log('状态: CHECK_LAUNCH');
+            if (currentPackage() !== config.packageName) {
+                log('未检测到 TikTok，启动应用');
+                app.launchPackage(config.packageName);
+                sleep(3000);
+            }
+            currentState = STATES.HOME;
+            break;
+
+        case STATES.HOME:
+            log('状态: HOME');
+            if (desc('Profile').exists()) {
+                currentState = STATES.PROFILE;
+            } else {
+                log('HOME: 未检测到 Profile 按钮，回退');
+                back(); sleep(1000);
+            }
+            break;
+
+        case STATES.PROFILE:
+            log('状态: PROFILE');
+            safeClick(desc('Profile'), 'Profile 按钮'); sleep(2000);
+            if (text('Log in to TikTok').exists() && desc('Use phone / email / username').exists()) {
+                log('检测到登录界面');
+                currentState = STATES.LOGIN_FLOW;
+            } else if (desc('Add another account').exists()) {
+                log('检测到已登录状态，点击 Add another account');
+                safeClick(desc('Add another account'), 'Add another account 按钮');
+                sleep(1500);
+                currentState = STATES.LOGIN_FLOW;
+            } else if (text('Settings and privacy').exists()) {
+                log('检测到已登录状态，准备登出');
+                currentState = STATES.LOGOUT_FLOW;
+            } else {
+                log('PROFILE: 未识别界面，打印文字');
+                printAllTexts(); sleep(2000);
+            }
+            break;
+
+        case STATES.LOGIN_FLOW:
+            log('状态: LOGIN_FLOW');
+            login();
+            currentState = STATES.DONE;
+            break;
+
+        case STATES.LOGOUT_FLOW:
+            log('状态: LOGOUT_FLOW');
+            logout();
+            currentState = STATES.DONE;
+            break;
+
+        case STATES.DONE:
+            log('状态: DONE，脚本结束');
+            exit();
+            break;
+
+        default:
+            log('未知状态，退出');
+            exit();
     }
-    try {
-        // 使用 split 提取 shortid
-        let parts = email.split('@');
-        if (parts.length !== 2 || parts[1] !== 'tsbytlj.com') {
-            log("ERROR", `邮箱格式错误: ${email}，预期格式为 <shortid>@tsbytlj.com`);
-            return null;
-        }
-        let shortid = parts[0];
-        log("INFO", `从邮箱 ${email} 提取 shortid: ${shortid}`);
-        return shortid;
-    } catch (e) {
-        log("ERROR", `提取 shortid 失败: ${e.message}`);
-        return null;
-    }
+}
+
+// 主循环
+console.show();
+log('脚本启动 - 状态机模式');
+while (true) {
+    try { step(); } catch (e) { console.error(e); log('脚本异常，重试'); }
+    sleep(500);
 }
