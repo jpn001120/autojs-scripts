@@ -171,6 +171,8 @@ function login() {
     // 步骤5：处理“Verify it’s really you”界面
     if (text('Verify it’s really you').exists()) {
         click(471, 666); sleep(1000); // 点击验证按钮
+        click(448, 1911); sleep(1000); // 点击next
+
         let passwordField = className('EditText').findOne(5000);
         if (passwordField && safeSetText(passwordField, config.password, '密码输入框')) {
             sleep(800);
