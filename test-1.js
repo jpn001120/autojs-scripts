@@ -222,7 +222,7 @@ function login() {
 
 
         // 出现text('Verify it’s really you') 需要点击并输入密码确认
-        if (text('Verify it’s really you').exists()) {
+        if (text('Before you continue, verify your identity using one of the following methods.').exists()) {
             showToast('需要密码确认');
             // 点击密码确认按钮
             click(480, 653); sleep(2000);
