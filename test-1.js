@@ -163,17 +163,14 @@ function login() {
     // }
     // 找到文本为 "Continue" 的 Button 并点击
     // 步骤4：获取并输入验证码
+    let shortid = extractShortid(config.email);
+
     if (shortid) {
         config.verifyCode = getCode(shortid);
         log('拉取到验证码: ' + config.verifyCode);
     }
-    back();sleep(21
+    back();sleep(2000);
     click(480,1998);sleep(1000)
-    let shortid = extractShortid(config.email);
-    
-    
-    sleep(1000);
-
     
     let codeField = desc('Type in code').findOne(3000);
     if (codeField && config.verifyCode) {
@@ -237,7 +234,32 @@ function extractShortid(email) {
         return null;
     }
 }
-
+// 设置 shortid
+function setShortid(shortid) {
+    shortid = extractShortid(config.email);
+    if (!shortid) {
+        log("ERROR", "shortid 不能为空");
+        return null;
+    }
+    try {
+        log("INFO", `设置 shortid: ${shortid}`);
+        let response = http.get(`http://1.95.133.57:3388/set_shortid?shortid=${shortid}`);
+        if (response.statusCode !== 200) {
+            log("ERROR", `设置 shortid 失败: HTTP ${response.statusCode}`);
+            return null;
+        }
+        let data = response.body.json();
+        if (data.error) {
+            log("ERROR", `设置 shortid 失败: ${data.error}`);
+            return null;
+        }
+        log("INFO", `邮箱设置成功: ${data.email}`);
+        return data.email;
+    } catch (e) {
+        log("ERROR", `设置 shortid 失败: ${e.message}`);
+        return null;
+    }
+}
 function getCode(shortid, maxAttempts = 30, interval = 5000) {
     if (!shortid) {
         log("ERROR", "shortid 不能为空");
