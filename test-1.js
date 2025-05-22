@@ -215,14 +215,14 @@ function login() {
         }
         if (desc('Type in code').exists()) {
             desc('Type in code').setText(config.verifyCode);
-            console.log('输入验证码: ' + config.verifyCode);
+            console.log('输入验证码: ' + config.verifyCode);sleep(1000);
         }else{
             showToast('未找到验证码输入框');
         }
 
 
         // 出现text('Verify it’s really you') 需要点击并输入密码确认
-        if (text('Before you continue, verify your identity using one of the following methods.').exists()) {
+        if (text('Before you continue, verify your identity using one of the following methods.').findOne(5000)) {
             showToast('需要密码确认');
             // 点击密码确认按钮
             click(480, 653); sleep(2000);
