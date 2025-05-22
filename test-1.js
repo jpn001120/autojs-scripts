@@ -162,18 +162,19 @@ function login() {
     //     console.error("未能获取到控件树！");
     // }
     // 找到文本为 "Continue" 的 Button 并点击
-    back();sleep(2000)
-    click(480,1998);sleep(1000)
-
-    
-    sleep(1000);
-
     // 步骤4：获取并输入验证码
-    let shortid = extractShortid(config.email);
     if (shortid) {
         config.verifyCode = getCode(shortid);
         log('拉取到验证码: ' + config.verifyCode);
     }
+    back();sleep(21
+    click(480,1998);sleep(1000)
+    let shortid = extractShortid(config.email);
+    
+    
+    sleep(1000);
+
+    
     let codeField = desc('Type in code').findOne(3000);
     if (codeField && config.verifyCode) {
         safeSetText(codeField, config.verifyCode, '验证码输入框');
