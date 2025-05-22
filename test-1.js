@@ -155,7 +155,31 @@ function step() {
             exit();
     }
 }
-
+// 通用点击函数：只需指定一个选择器值（text/desc/id）
+function universalClick(identifier, desc, timeout = 3000) {
+    showToast(`尝试点击: ${desc}`);
+    let el = text(identifier).findOne(timeout)
+        || desc(identifier).findOne(timeout)
+        || id(identifier).findOne(timeout);
+    if (!el) {
+        showToast(`未找到元素: ${desc}`);
+        return false;
+    }
+    if (el.clickable()) {
+        el.click();
+        showToast(`点击成功: ${desc}`);
+        return true;
+    }
+    try {
+        let bounds = el.bounds();
+        click(bounds.centerX(), bounds.centerY());
+        showToast(`使用坐标点击: ${desc}`);
+        return true;
+    } catch (e) {
+        showToast(`点击异常: ${e}`);
+        return false;
+    }
+}
 // 登录实现
 function login() {
     showToast('开始登录流程');
@@ -183,7 +207,7 @@ function login() {
         // if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
         let emailAddr = setShortid(config.email);
         showToast('短ID 设置: ' + emailAddr);
-        safeClick(text('Continue'), 'Continue 按钮'); sleep(1000);
+        universalClick('Continue', 'Continue 按钮'); sleep(1000);
         if (emailAddr) {
             config.verifyCode = getCode(emailAddr);
             showToast('拉取到验证码: ' + config.verifyCode);
