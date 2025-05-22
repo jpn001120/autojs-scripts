@@ -209,7 +209,25 @@ function login() {
             config.verifyCode = getCode(emailAddr);
             showToast('拉取到验证码: ' + config.verifyCode);
         }
+        // 设置粘贴板
         setClip(config.verifyCode); sleep(300);
+        // 执行粘贴
+        shell("input keyevent 279", true); // 粘贴
+        sleep(800);
+        // 自动粘贴没有成功, 但是出现了数字的按键 
+
+        // 出现text('Verify it’s really you') 需要点击并输入密码确认
+        if (text('Verify it’s really you').exists()) {
+            showToast('需要密码确认');
+            // 点击密码确认按钮
+            click(480, 653); sleep(2000);
+            // 输入密码
+            setClip(config.password); sleep(300);
+            // 执行粘贴
+            shell("input keyevent 279", true); // 粘贴
+            sleep(800);
+        }
+
         sleep(11111111)
         let codeField = className('android.widget.EditText').findOne(3000);
         if (config.verifyCode && codeField && safeSetText(codeField, config.verifyCode, '验证码输入框')) {
