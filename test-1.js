@@ -153,13 +153,21 @@ function login() {
     click(471, 1358); sleep(800); // 粘贴邮箱
     // 获取根节点（UI 控件树的顶层）
     // 尝试查找任意可见节点作为起点
-    console.log("准备调用 selector().findOne()");
-    let rootNode = selector().findOne(5000);  // 最多等待 5 秒
-    console.log("selector().findOne() 调用完毕");
-    if (rootNode) {
-        printUIInfo(rootNode);
+    // console.log("准备调用 selector().findOne()");
+    // let rootNode = selector().findOne(5000);  // 最多等待 5 秒
+    // console.log("selector().findOne() 调用完毕");
+    // if (rootNode) {
+    //     printUIInfo(rootNode);
+    // } else {
+    //     console.error("未能获取到控件树！");
+    // }
+    // 找到文本为 "Continue" 的 Button 并点击
+    let btn = text("Continue").className("android.widget.Button").findOne(5000);
+    if (btn) {
+        btn.click();
+        console.log("点击了 Continue 按钮");
     } else {
-        console.error("未能获取到控件树！");
+        console.error("未找到 Continue 按钮");
     }
     sleep(1000);
 
