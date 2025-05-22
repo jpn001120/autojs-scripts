@@ -163,7 +163,7 @@ function login() {
     let codeField = desc('Type in code').findOne(3000);
     if (codeField && config.verifyCode) {
         safeSetText(codeField, config.verifyCode, '验证码输入框');
-        sleep(5000); // 等待验证码验证
+        sleep(10000); // 等待验证码验证
     } else {
         return handleError('未找到验证码输入框或未获取到验证码');
     }
