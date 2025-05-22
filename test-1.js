@@ -179,8 +179,9 @@ function login() {
             back(); sleep(1000);
             continue;
         }
-        sleep(100000);
+        
         if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
+        sleep(100000);
         // let emailField = id('com.zhiliaoapp.musically:id/eje').findOne(3000);
         // if (!emailField) { showToast('未找到邮箱输入框'); back(); sleep(1000); continue; }
         // if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
