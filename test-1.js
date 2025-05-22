@@ -163,16 +163,7 @@ function login() {
     // }
     // 找到文本为 "Continue" 的 Button 并点击
     back();sleep(2000)
-    let btn = id("com.zhiliaoapp.musically:id/ddd").findOne(5000);
-    if (btn) {
-        console.log("btn bounds:", btn.bounds());
-        console.log("btn center:", [(btn.bounds().left + btn.bounds().right)/2, (btn.bounds().top + btn.bounds().bottom)/2]);
-        console.log("btn clickable:", btn.clickable());
-        console.log("btn visibleToUser:", btn.visibleToUser());
-        btn.click();
-    } else {
-        console.log("没找到按钮");
-    }
+    click(480,1998);sleep(1000)
 
     
     sleep(1000);
