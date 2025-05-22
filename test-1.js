@@ -151,18 +151,6 @@ function login() {
     // 步骤3：输入邮箱并点击“Continue”
     setClip(config.email); sleep(300);
     click(471, 1358); sleep(800); // 粘贴邮箱
-    // 获取根节点（UI 控件树的顶层）
-    // 尝试查找任意可见节点作为起点
-    // console.log("准备调用 selector().findOne()");
-    // let rootNode = selector().findOne(5000);  // 最多等待 5 秒
-    // console.log("selector().findOne() 调用完毕");
-    // if (rootNode) {
-    //     printUIInfo(rootNode);
-    // } else {
-    //     console.error("未能获取到控件树！");
-    // }
-    // 找到文本为 "Continue" 的 Button 并点击
-    // 步骤4：获取并输入验证码
     let shortid = extractShortid(config.email);
 
     setShortid(shortid);
