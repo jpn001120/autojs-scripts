@@ -226,7 +226,7 @@ function login() {
         // 出现text('Verify it’s really you') 需要点击并输入密码确认
         printAllTexts();sleep(10000);
         // 暂时无法判断界面的元素, 所 444 649 点击verify password 然后点击next  
-        click(444, 649);sleep(1000);
+        click(471, 666);sleep(1000);
         click(468, 1937);sleep(1000);
         // 找到className('EditText') 然后输入config.password
         if(className('EditText').findOne(3000)){
