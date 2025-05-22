@@ -53,13 +53,13 @@ function safeSetText(field, text, desc) {
 
         // 2. 使用剪贴板粘贴
         setClip(text); sleep(300);
-        shell("input keyevent 279", true); // 粘贴
-        sleep(800);
+        // 自动点击粘贴板按钮（坐标471, 1358）
+        click(471, 1358); sleep(800);
         if (field.text && field.text().indexOf(text) !== -1) {
             showToast(`粘贴成功: ${desc}`);
             return true;
         }
-
+        
         // 3. 使用 keys.text 兜底
         try {
             keys.text(text); sleep(1000);
