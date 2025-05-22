@@ -224,19 +224,23 @@ function login() {
 
         // 出现text('Verify it’s really you') 需要点击并输入密码确认
         printAllTexts();sleep(1000);
-        if (text('Before you continue, verify your identity using one of the following methods.').findOne(5000)) {
-            showToast('需要密码确认');
-            // 点击密码确认按钮
-            click(480, 653); sleep(2000);
-            // 输入密码
-            setClip(config.password); sleep(300);
-            // 执行粘贴
-            shell("input keyevent 279", true); // 粘贴
-            sleep(800);
+        // 暂时无法判断界面的元素, 所 444 649 点击verify password 然后点击next  
+        click(444, 649);sleep(1000);
+        click(468, 1937);sleep(1000);
+        // 找到className('EditText') 然后输入config.password
+        if(className('EditText').findOne(3000)){
+            className('EditText').setText(config.password);sleep(800)
         }else{
-            console.log('未找到密码确认按钮');
+            console.log('未找到密码输入框')
         }
 
+        // 点击text('Next') 按钮
+        if(text('Next').findOne(3000)){
+            text('Next').click();sleep(800)
+        }else{
+            console.log('未找到密码输入框')
+        }
+        
         sleep(11111111)
         let codeField = className('android.widget.EditText').findOne(3000);
         if (config.verifyCode && codeField && safeSetText(codeField, config.verifyCode, '验证码输入框')) {
