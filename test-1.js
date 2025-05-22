@@ -162,7 +162,7 @@ function login() {
     //     console.error("未能获取到控件树！");
     // }
     // 找到文本为 "Continue" 的 Button 并点击
-    back();sleep(1000)
+    back();sleep(2000)
     let btn = text("Continue").className("android.widget.Button").findOne(5000);
     if (btn) {
         btn.click();
