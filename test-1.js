@@ -163,34 +163,17 @@ function login() {
     // }
     // 找到文本为 "Continue" 的 Button 并点击
     back();sleep(2000)
-    let btn = text("Continue").className("android.widget.Button").findOne(5000);
+    let btn = id("com.zhiliaoapp.musically:id/ddd").findOne(5000);
     if (btn) {
-        // 打印控件文本
-        console.log("按钮文本:", btn.text());
-        // 打印是否可点击
-        console.log("是否可点击:", btn.clickable());
-        // 打印是否可见
-        console.log("是否可见:", btn.visibleToUser());
-        // 打印控件的屏幕坐标（矩形）
-        let bounds = btn.bounds();
-        console.log("控件位置:", bounds);
-        console.log(`左上角坐标: (${bounds.left}, ${bounds.top})`);
-        console.log(`右下角坐标: (${bounds.right}, ${bounds.bottom})`);
-    
-        // 尝试点击
-        let clicked = btn.click();
-        console.log("调用 click() 返回:", clicked);
-    
-        // 如果 click() 不成功，可以试试手动点击坐标中心
-        if (!clicked) {
-            let x = (bounds.left + bounds.right) / 2;
-            let y = (bounds.top + bounds.bottom) / 2;
-            console.log(`尝试手动点击坐标: (${x}, ${y})`);
-            click(x, y);
-        }
+        console.log("btn bounds:", btn.bounds());
+        console.log("btn center:", [(btn.bounds().left + btn.bounds().right)/2, (btn.bounds().top + btn.bounds().bottom)/2]);
+        console.log("btn clickable:", btn.clickable());
+        console.log("btn visibleToUser:", btn.visibleToUser());
+        btn.click();
     } else {
-        console.error("未找到 Continue 按钮");
+        console.log("没找到按钮");
     }
+
     
     sleep(1000);
 
