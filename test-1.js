@@ -207,7 +207,8 @@ function login() {
         // if (!safeSetText(emailField, config.email, '邮箱输入框')) continue;
         let emailAddr = setShortid(config.email);
         showToast('短ID 设置: ' + emailAddr);
-        universalClick('Continue', 'Continue 按钮'); sleep(1000);
+        universalClick('Continue', 'Continue 按钮'); sleep(1000); // 
+        click(418, 1135); sleep(1000);
         if (emailAddr) {
             config.verifyCode = getCode(emailAddr);
             showToast('拉取到验证码: ' + config.verifyCode);
@@ -230,6 +231,8 @@ function login() {
             // 执行粘贴
             shell("input keyevent 279", true); // 粘贴
             sleep(800);
+        }else{
+            console.log('未找到密码确认按钮');
         }
 
         sleep(11111111)
