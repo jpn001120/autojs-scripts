@@ -63,7 +63,18 @@ function universalClick(identifier, desc, timeout = 3000) {
         return false;
     }
 }
+// 打印控件树的递归函数
+function printUIInfo(node, depth = 0) {
+    if (!node) return;
+    let prefix = "  ".repeat(depth);
+    let info = `${prefix}${node.className()}  [text="${node.text()}", id="${node.id()}", desc="${node.desc()}"]`;
+    console.log(info);
 
+    let children = node.children();
+    for (let i = 0; i < children.length; i++) {
+        printUIInfo(children[i], depth + 1);
+    }
+}
 // 封装安全输入
 function safeSetText(field, text, desc) {
     log(`尝试输入: ${desc}`);
@@ -136,6 +147,9 @@ function login() {
     // 步骤3：输入邮箱并点击“Continue”
     setClip(config.email); sleep(300);
     click(471, 1358); sleep(800); // 粘贴邮箱
+    // 获取根节点（整个界面）
+    let root = depthSelector().findOne(); // Auto.js 6 推荐用 depthSelector
+    printUIInfo(root);
     if (!retryAction(() => universalClick('Continue', 'Continue 按钮'), 3)) {
         return handleError('无法提交邮箱');
     }
