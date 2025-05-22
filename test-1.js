@@ -217,7 +217,7 @@ function login() {
         }
         if (desc('Type in code').exists()) {
             desc('Type in code').setText(config.verifyCode);
-            console.log('输入验证码: ' + config.verifyCode);sleep(1000);
+            console.log('输入验证码: ' + config.verifyCode);sleep(5000);
         }else{
             showToast('未找到验证码输入框');
         }
@@ -229,7 +229,7 @@ function login() {
         click(471, 666);sleep(1000);
         click(468, 1937);sleep(1000);
         // 找到className('EditText') 然后输入config.password
-        if(className('EditText').findOne(3000)){
+        if(className('EditText').findOne(5000)){
             className('EditText').setText(config.password);sleep(800)
         }else{
             console.log('未找到密码输入框')
