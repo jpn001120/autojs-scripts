@@ -167,7 +167,7 @@ function login() {
         return handleError('未找到验证码输入框或未获取到验证码');
     }
 
-    // 步骤5：处理“Verify it’s really you”界面
+    sleep(6666)
     click(471, 666); sleep(1000); // 点击验证按钮
     click(448, 1911); sleep(1000); // 点击next
 
