@@ -188,12 +188,12 @@ function login() {
         if (!safeClick(desc('Email / Username'), 'Email/Username 按钮')) continue;
         sleep(1000);
         // 获取邮箱输入框（第一个 EditText）
-        let emailField = id("eje").findOne();
-        if (!emailField) {
-            showToast('未找到邮箱输入框'); 
-            back(); sleep(1000);
-            continue;
-        }
+        // let emailField = id("eje").findOne();
+        // if (!emailField) {
+        //     showToast('未找到邮箱输入框'); 
+        //     back(); sleep(1000);
+        //     continue;
+        // }
         
         // 2. 使用剪贴板粘贴 邮箱并点击 
         setClip(text); sleep(300);
