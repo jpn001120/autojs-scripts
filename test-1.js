@@ -151,6 +151,8 @@ function login() {
     // 获取根节点（整个界面）
     let root = depthSelector().findOne(); // Auto.js 6 推荐用 depthSelector
     printUIInfo(root);
+    // 执行一次返回 收起键盘
+    back();
     if (!retryAction(() => universalClick('Continue', 'Continue 按钮'), 3)) {
         return handleError('无法提交邮箱');
     }
