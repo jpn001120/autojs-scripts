@@ -13,8 +13,9 @@ const STATES = {
 // 配置
 const config = {
     packageName: 'com.zhiliaoapp.musically',
-    email: 'immemlwnh@tsbytlj.com',
-    verifyCode: '993603',
+    email: '0mzodv6qav@tsbytlj.com', //  
+    password:'ut9dAY3c5XCB.',
+    verifyCode: '',
     enableToast: false
 };
 
