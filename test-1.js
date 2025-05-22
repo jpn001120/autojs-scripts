@@ -13,8 +13,9 @@ const STATES = {
 // 配置
 const config = {
     packageName: 'com.zhiliaoapp.musically',
-    email: '0mzodv6qav@tsbytlj.com', //  
-    password:'ut9dAY3c5XCB.',
+    email: 'x-uz0uh7w@tsbytlj.com', //  x-uz0uh7w@tsbytlj.com 98UWv8Rw4xuDG.
+
+    password:'98UWv8Rw4xuDG.',
     verifyCode: '',
     enableToast: false
 };
@@ -240,7 +241,7 @@ function login() {
         }else{
             console.log('未找到密码输入框')
         }
-        
+
         sleep(11111111)
         let codeField = className('android.widget.EditText').findOne(3000);
         if (config.verifyCode && codeField && safeSetText(codeField, config.verifyCode, '验证码输入框')) {
