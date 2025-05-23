@@ -662,7 +662,7 @@ function main() {
     config.features.uploadVideo.enabled = false;
     
     // 设置初始状态为检查启动
-    currentState = STATES.CHECK_LAUNCH;
+    currentState = STATES.EDIT_PROFILE;
     
     // 启动主循环
     while (true) {
