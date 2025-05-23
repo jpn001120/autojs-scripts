@@ -354,8 +354,6 @@ function editProfile() {
     app.launchPackage(config.packageName);
     sleep(3000);
 
-    
-
     // 2. 点击profile
     log('点击个人资料按钮');
     if (!retryAction(() => (clickNearestClickable('Profile')), 3)) {
@@ -368,6 +366,12 @@ function editProfile() {
     if (text('Log in to TikTok').exists()) {
         log('未登录，执行登录流程');
         login();
+        log('点击个人资料按钮');
+        if (!retryAction(() => (clickNearestClickable('Profile')), 3)) {
+            return handleError('无法进入个人资料页面');
+        }
+        sleep(2000);
+        
     } else {
         log('已登录状态');
     }
