@@ -403,7 +403,7 @@ function editProfile() {
 
         // 7. 保存昵称
         log('点击保存昵称');
-        if (!retryAction(() => clickNearestClickable(text('Save')), 3)) {
+        if (!retryAction(() => clickNearestClickable('Save'), 3)) {
             return handleError('无法保存昵称');
         }
         log('昵称修改完成');
