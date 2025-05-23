@@ -139,13 +139,13 @@ function login() {
     printAllTexts(); // 记录初始界面状态
 
     // 步骤1：点击"Use phone / email / username"
-    if (!retryAction(() => clickNearestClickable('Use phone / email / username'))) {
+    if (safeClickByText('Use phone / email / username')) {
         return handleError('无法进入登录界面');
     }
     sleep(1000);
 
     // 步骤2：点击"Email / Username"
-    if (!retryAction(() => clickNearestClickable(('Email / Username')))) {
+    if (!retryAction(() => safeClickByText('Email / Username'), 3)) {
         return handleError('无法选择邮箱登录');
     }
     sleep(1000);
@@ -201,9 +201,9 @@ function logout() {
     let settingBtn = text('Settings and privacy').scrollIntoView(3000);
     if (!settingBtn) { log('未找到 Settings and privacy'); return; }
     settingBtn.click(); sleep(1000);
-    if (clickNearestClickable(('Log out'))) {
+    if (clickNearestClickable('Log out')) {
         sleep(500);
-        clickNearestClickable(('Log out'));
+        clickNearestClickable('Log out');
         log('登出完成');
     }
 }
@@ -446,7 +446,7 @@ function editProfile() {
 
         // 3. 点击profile
         log('点击个人资料按钮');
-        if (!retryAction(() => clickNearestClickable(('Profile')), 3)) {
+        if (!retryAction(() => clickNearestClickable('Profile'), 3)) {
             return handleError('无法进入个人资料页面');
         }
         sleep(2000);
@@ -473,7 +473,7 @@ function editProfile() {
 
         // 7. 保存简介
         log('点击保存简介');
-        if (!retryAction(() => clickNearestClickable(('Save')), 3)) {
+        if (!retryAction(() => clickNearestClickable('Save'), 3)) {
             return handleError('无法保存简介');
         }
         log('简介修改完成');
@@ -511,14 +511,14 @@ function editProfile() {
 
         // 5. 点击Change photo
         log('点击更换照片按钮');
-        if (!retryAction(() => clickNearestClickable(('Change photo')), 3)) {
+        if (!retryAction(() => clickNearestClickable('Change photo'), 3)) {
             return handleError('无法进入更换照片页面');
         }
         sleep(2000);
 
         // 6. 点击ALLOW
         log('点击允许权限按钮');
-        if (!retryAction(() => clickNearestClickable(('ALLOW')), 3)) {
+        if (!retryAction(() => clickNearestClickable('ALLOW'), 3)) {
             return handleError('无法授予权限');
         }
         sleep(2000);
@@ -547,13 +547,13 @@ function uploadVideo() {
     log('开始上传视频');
     
     // 1. 点击发布按钮
-    if (!retryAction(() => clickNearestClickable(('Create')), 3)) {
+    if (!retryAction(() => clickNearestClickable('Create'), 3)) {
         return handleError('无法进入发布页面');
     }
     sleep(1000);
 
     // 2. 选择视频
-    if (!retryAction(() => clickNearestClickable(('Upload')), 3)) {
+    if (!retryAction(() => clickNearestClickable('Upload'), 3)) {
         return handleError('无法进入上传页面');
     }
     sleep(1000);
@@ -594,13 +594,13 @@ function step() {
 
         case STATES.PROFILE:
             log('状态: PROFILE');
-            clickNearestClickable(('Profile')); sleep(2000);
+            clickNearestClickable('Profile'); sleep(2000);
             if (text('Log in to TikTok').exists() && desc('Use phone / email / username').exists()) {
                 log('检测到登录界面');
                 currentState = STATES.LOGIN_FLOW;
             } else if (desc('Add another account').exists()) {
                 log('检测到已登录状态，点击 Add another account');
-                clickNearestClickable(('Add another account'));
+                clickNearestClickable('Add another account');
                 sleep(1500);
                 currentState = STATES.LOGIN_FLOW;
             } else if (text('Settings and privacy').exists()) {
