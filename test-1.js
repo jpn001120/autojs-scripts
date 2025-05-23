@@ -418,51 +418,12 @@ function editProfile() {
         // 关闭app
         back();
         sleep(1000);
-        back();
-        sleep(1000);
-        back();
-        sleep(1000);
 
     }
 
     // 修改简介
     if (config.features.editProfile.bio) {
-        log('开始修改简介');
-        // 1. 打开app 如果已经打开了就关闭再打开
-        log('检查并启动TikTok应用');
-        if (currentPackage() === config.packageName) {
-            log('TikTok已运行，先关闭应用');
-            app.launchPackage(config.packageName);
-            sleep(2000);
-            back();
-            sleep(1000);
-        }
-        log('启动TikTok应用');
-        app.launchPackage(config.packageName);
-        sleep(3000);
-
-        // 2. 判断是否已经登录 如果没登录 就执行登录
-        log('检查登录状态');
-        if (text('Log in to TikTok').exists()) {
-            log('未登录，执行登录流程');
-            login();
-        } else {
-            log('已登录状态');
-        }
-        sleep(2000);
-
-        // 3. 点击profile
-        log('点击个人资料按钮');
-        if (!retryAction(() => clickNearestClickable('Profile'), 3)) {
-            return handleError('无法进入个人资料页面');
-        }
-        sleep(2000);
-        // 4. 点击Set up profile
-        log('点击设置资料按钮');
-        if (!retryAction(() => clickNearestClickable('Set up profile'), 3)) {
-            return handleError('无法进入资料设置页面');
-        }
-        sleep(2000);
+        
         // 5. 点击Bio进入简介编辑页面
         log('点击Bio进入简介编辑页面');
         if (!retryAction(() => clickNearestClickable('Bio'), 3)) {
