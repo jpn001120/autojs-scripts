@@ -511,7 +511,7 @@ function editProfile() {
 
         // 7. 点击左上角第一个
         log('点击左上角第一个图片');
-        click(137, 368);
+        fullId('com.zhiliaoapp.musically:id/ff6').findOne.click();
         sleep(2000);
 
         log('Next');
