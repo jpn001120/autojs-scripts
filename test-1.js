@@ -511,7 +511,7 @@ function editProfile() {
 
         // 7. 点击左上角第一个
         log('id 选中左上角第一个图片');
-        id('h5l').findOne.click();
+        id('h5l').findOne().click();
         sleep(2000);
 
         log('点击Next');
