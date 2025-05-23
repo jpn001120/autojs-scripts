@@ -519,6 +519,15 @@ function editProfile() {
             return handleError('无法授予权限');
         }
 
+        // 删除avatarPath图片
+        // 检查文件是否存在
+        if (files.exists(avatarPath)) {
+            files.remove(avatarPath);
+            toast("图片已删除");
+        } else {
+            toast("文件不存在");
+        }
+
         log('头像修改完成');
     }
 
