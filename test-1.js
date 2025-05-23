@@ -360,6 +360,8 @@ function editProfile() {
 
         // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成
 
+        // 退出app
+
     }
     if (config.features.editProfile.bio) {
         // 1. 打开app 如果已经打开了就关闭再打开
@@ -374,7 +376,9 @@ function editProfile() {
 
         // 6.fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的简介
 
-        // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成    
+        // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成  
+        
+        // 退出app
 
     }
     
