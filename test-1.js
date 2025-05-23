@@ -23,8 +23,8 @@ const config = {
     features: {
         editProfile: {
             enabled: true,           // 是否启用资料修改
-            nickname: '新昵称',      // 新昵称（可选）
-            bio: '新简介',          // 新简介（可选）
+            nickname: 'wqnmd008',      // 新昵称（可选）
+            bio: 'follow me for every day',          // 新简介（可选）
             avatar: '/sdcard/avatar.jpg'  // 新头像路径（可选）
         },
         uploadVideo: {
@@ -317,45 +317,13 @@ function getCode(shortid, maxAttempts = 30, interval = 5000) {
 
 // 资料修改模块
 function editProfile() {
-    log('开始修改资料');
-    
-    // 1. 进入编辑资料页面
-    if (!retryAction(() => safeClick(text('Edit profile')), 3)) {
-        return handleError('无法进入编辑资料页面');
-    }
-    sleep(1000);
+    // 1. 打开app 如果已经打开了就关闭再打开
 
-    // 2. 修改昵称（如果配置了）
-    if (config.features.editProfile.nickname) {
-        let nicknameField = desc('Nickname').findOne(3000);
-        if (nicknameField) {
-            safeSetText(nicknameField, config.features.editProfile.nickname, '昵称');
-        }
-    }
+    // 2. 判断是否已经登录 如果没登录 就执行登录
 
-    // 3. 修改简介（如果配置了）
-    if (config.features.editProfile.bio) {
-        let bioField = desc('Bio').findOne(3000);
-        if (bioField) {
-            safeSetText(bioField, config.features.editProfile.bio, '简介');
-        }
-    }
+    // 3. 点击profile
 
-    // 4. 修改头像（如果配置了）
-    if (config.features.editProfile.avatar) {
-        let avatarBtn = desc('Change avatar').findOne(3000);
-        if (avatarBtn) {
-            safeClick(avatarBtn);
-            // 选择图片逻辑...
-        }
-    }
-
-    // 5. 保存修改
-    if (retryAction(() => safeClick(text('Save')), 3)) {
-        log('资料修改成功');
-    } else {
-        handleError('保存资料失败');
-    }
+    // 4. 点击desc('Set up profile') 
 }
 
 // 视频上传模块
