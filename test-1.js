@@ -672,6 +672,7 @@ function main() {
         } catch (e) { 
             console.error(e); 
             log('脚本异常，重试'); 
+            sleep(500000);
         }
         sleep(500);
     }
