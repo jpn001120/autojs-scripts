@@ -510,11 +510,11 @@ function editProfile() {
         sleep(2000);
 
         // 7. 点击左上角第一个
-        log('id选中左上角第一个图片');
+        log('id 选中左上角第一个图片');
         id('h5l').findOne.click();
         sleep(2000);
 
-        log('Next');
+        log('点击Next');
         if (!retryAction(() => clickNearestClickable('Next'), 3)) {
             return handleError('无法授予权限');
         }
