@@ -450,7 +450,12 @@ function editProfile() {
             return handleError('无法进入个人资料页面');
         }
         sleep(2000);
-        
+        // 4. 点击Set up profile
+        log('点击设置资料按钮');
+        if (!retryAction(() => clickNearestClickable('Set up profile'), 3)) {
+            return handleError('无法进入资料设置页面');
+        }
+        sleep(2000);
         // 5. 点击Bio进入简介编辑页面
         log('点击Bio进入简介编辑页面');
         if (!retryAction(() => clickNearestClickable('Bio'), 3)) {
