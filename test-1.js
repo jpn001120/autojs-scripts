@@ -170,8 +170,8 @@ function login() {
     }
 
     sleep(1666)
-    safeClickByText('password'); sleep(1000); // 点击验证按钮
-    safeClickByText('Next'); sleep(1000); // 点击next
+    click(471, 666); sleep(1000); // 点击验证按钮
+    click(448, 1911); sleep(1000); // 点击next
 
     let passwordField = className('EditText').findOne(5000);
     if (passwordField && safeSetText(passwordField, config.password, '密码输入框')) {
