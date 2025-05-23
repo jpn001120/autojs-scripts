@@ -139,7 +139,7 @@ function login() {
     printAllTexts(); // 记录初始界面状态
 
     // 步骤1：点击"Use phone / email / username"
-    if (safeClickByText('Use phone / email / username')) {
+    if (!retryAction(() => safeClickByText('Use phone / email / username'), 3)) {
         return handleError('无法进入登录界面');
     }
     sleep(1000);
@@ -372,7 +372,7 @@ function editProfile() {
         log('已登录状态');
     }
     sleep(2000);
-    
+
     // 4. 点击Set up profile
     log('点击设置资料按钮');
     if (!retryAction(() => clickNearestClickable('Edit profile'), 3)) {
