@@ -207,34 +207,29 @@ function logout() {
         log('登出完成');
     }
 }
-/**
- * 安全点击某个 UI 对象。如果 clickable 为 false，则尝试点击中心点。
- * @param {UiObject} uiObj - 目标 UI 控件对象
- * @returns {boolean} - 是否成功点击
- */
-function safeClick(uiObj) {
-    if (!uiObj) {
-        console.error("safeClick: 控件为空");
+function safeClickByText(txt) {
+    let obj = text(txt).findOne(3000);
+    if (!obj) {
+        toast("未找到文本控件: " + txt);
         return false;
     }
 
-    console.log("控件信息：");
-    console.log("  文本: " + uiObj.text());
-    console.log("  描述: " + uiObj.desc());
-    console.log("  类名: " + uiObj.className());
-    console.log("  clickable: " + uiObj.clickable());
-
-    if (uiObj.clickable()) {
-        console.log("使用 click() 尝试点击...");
-        return uiObj.click();
+    if (obj.clickable()) {
+        return obj.click();
     } else {
-        let bounds = uiObj.bounds();
-        let x = bounds.centerX();
-        let y = bounds.centerY();
-        console.log(`clickable = false，尝试点击坐标中心点 (${x}, ${y})`);
-        return click(x, y);
+        let clickableParent = obj;
+        while (clickableParent && !clickableParent.clickable()) {
+            clickableParent = clickableParent.parent();
+        }
+        if (clickableParent) {
+            return clickableParent.click();
+        } else {
+            let b = obj.bounds();
+            return click(b.centerX(), b.centerY());
+        }
     }
 }
+
 // 邮箱验证码获取相关函数
 function extractShortid(email) {
     if (!email || typeof email !== 'string') {
