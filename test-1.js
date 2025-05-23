@@ -315,6 +315,74 @@ function getCode(shortid, maxAttempts = 30, interval = 5000) {
     return null;
 }
 
+// 资料修改模块
+function editProfile() {
+    log('开始修改资料');
+    
+    // 1. 进入编辑资料页面
+    if (!retryAction(() => safeClick(text('Edit profile')), 3)) {
+        return handleError('无法进入编辑资料页面');
+    }
+    sleep(1000);
+
+    // 2. 修改昵称（如果配置了）
+    if (config.features.editProfile.nickname) {
+        let nicknameField = desc('Nickname').findOne(3000);
+        if (nicknameField) {
+            safeSetText(nicknameField, config.features.editProfile.nickname, '昵称');
+        }
+    }
+
+    // 3. 修改简介（如果配置了）
+    if (config.features.editProfile.bio) {
+        let bioField = desc('Bio').findOne(3000);
+        if (bioField) {
+            safeSetText(bioField, config.features.editProfile.bio, '简介');
+        }
+    }
+
+    // 4. 修改头像（如果配置了）
+    if (config.features.editProfile.avatar) {
+        let avatarBtn = desc('Change avatar').findOne(3000);
+        if (avatarBtn) {
+            safeClick(avatarBtn);
+            // 选择图片逻辑...
+        }
+    }
+
+    // 5. 保存修改
+    if (retryAction(() => safeClick(text('Save')), 3)) {
+        log('资料修改成功');
+    } else {
+        handleError('保存资料失败');
+    }
+}
+
+// 视频上传模块
+function uploadVideo() {
+    log('开始上传视频');
+    
+    // 1. 点击发布按钮
+    if (!retryAction(() => safeClick(desc('Create')), 3)) {
+        return handleError('无法进入发布页面');
+    }
+    sleep(1000);
+
+    // 2. 选择视频
+    if (!retryAction(() => safeClick(text('Upload')), 3)) {
+        return handleError('无法进入上传页面');
+    }
+    sleep(1000);
+
+    // 3. 选择视频文件
+    // 这里需要实现文件选择逻辑...
+
+    // 4. 等待上传完成
+    // 这里需要实现上传进度检测逻辑...
+
+    log('视频上传完成');
+}
+
 // 状态机核心
 let currentState = STATES.CHECK_LAUNCH;
 
@@ -369,6 +437,18 @@ function step() {
         case STATES.LOGOUT_FLOW:
             log('状态: LOGOUT_FLOW');
             logout();
+            currentState = STATES.DONE;
+            break;
+
+        case STATES.EDIT_PROFILE:
+            log('状态: EDIT_PROFILE');
+            editProfile();
+            currentState = STATES.DONE;
+            break;
+
+        case STATES.UPLOAD_VIDEO:
+            log('状态: UPLOAD_VIDEO');
+            uploadVideo();
             currentState = STATES.DONE;
             break;
 
