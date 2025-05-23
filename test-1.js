@@ -483,7 +483,7 @@ function editProfile() {
         // 扫描通知媒体库
         let Uri = android.net.Uri;
         let Intent = android.content.Intent;
-        let uri = Uri.fromFile(new java.io.File(path));
+        let uri = Uri.fromFile(new java.io.File(avatarPath));
         let intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
         context.sendBroadcast(intent);
         toast("头像下载完成并通知媒体库");
