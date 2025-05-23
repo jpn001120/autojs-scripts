@@ -483,7 +483,8 @@ function editProfile() {
         // } catch (e) {
         //     return handleError('头像下载异常: ' + e);
         // }
-        
+        log('下载头像图片结束');
+
 
         sleep(1000);
 
