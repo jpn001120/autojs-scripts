@@ -451,6 +451,8 @@ function editProfile() {
         }
         log('简介修改完成');
         sleep(2000);
+        back();
+        sleep(1000);
     }
 
     // 修改头像
