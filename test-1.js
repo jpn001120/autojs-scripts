@@ -412,7 +412,15 @@ function editProfile() {
             return handleError('无法保存昵称');
         }
         log('昵称修改完成');
-        sleep(2000);
+
+        // 关闭app
+        back();
+        sleep(1000);
+        back();
+        sleep(1000);
+        back();
+        sleep(1000);
+        
     }
 
     // 修改简介
