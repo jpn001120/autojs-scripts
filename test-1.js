@@ -482,16 +482,12 @@ function editProfile() {
 
         // 4. 点击头像 text('Change photo')
         log('点击当前头像');
-        let avatarBtn = clickNearestClickable('Change photo').findOne(3000);
-        if (!avatarBtn) {
-            return handleError('未找到头像按钮');
-        }
-        (avatarBtn).click();
+        clickNearestClickable('Change photo');
         sleep(2000);
 
         // 5. 点击Change photo
         log('点击更换照片按钮');
-        if (!retryAction(() => clickNearestClickable('Change photo'), 3)) {
+        if (!retryAction(() => clickNearestClickable('Select from Gallery'), 3)) {
             return handleError('无法进入更换照片页面');
         }
         sleep(2000);
