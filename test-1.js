@@ -665,17 +665,18 @@ function main() {
     currentState = STATES.EDIT_PROFILE;
     
     // 启动主循环
-    while (true) {
-        try { 
-            console.log('程序启动');
-            step(); 
-        } catch (e) { 
-            console.error(e); 
-            log('脚本异常，重试'); 
-            sleep(500000);
-        }
-        sleep(500);
-    }
+    // while (true) {
+    //     try { 
+    //         console.log('程序启动');
+    //         step(); 
+    //     } catch (e) { 
+    //         console.error(e); 
+    //         log('脚本异常，重试'); 
+    //         sleep(500000);
+    //     }
+    //     sleep(500);
+    // }
+    editProfile();
 }
 
 // 启动脚本
