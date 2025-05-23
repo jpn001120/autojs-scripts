@@ -379,47 +379,47 @@ function editProfile() {
     sleep(2000);
 
     // 修改昵称
-    if (config.features.editProfile.nickname) {
-        log('开始修改昵称');
-        // 5. 点击Name进入昵称编辑页面
-        log('点击Name进入昵称编辑页面');
-        if (!retryAction(() => clickNearestClickable('Name'), 3)) {
-            return handleError('无法进入昵称编辑页面');
-        }
-        sleep(2000);
+    // if (config.features.editProfile.nickname) {
+    //     log('开始修改昵称');
+    //     // 5. 点击Name进入昵称编辑页面
+    //     log('点击Name进入昵称编辑页面');
+    //     if (!retryAction(() => clickNearestClickable('Name'), 3)) {
+    //         return handleError('无法进入昵称编辑页面');
+    //     }
+    //     sleep(2000);
 
-        // 6. 修改昵称
-        log('开始输入新昵称: ' + config.features.editProfile.nickname);
-        let nicknameField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
-        if (nicknameField) {
-            nicknameField.setText('');
-            sleep(500);
-            nicknameField.setText(config.features.editProfile.nickname);
-            log('昵称输入完成');
-        } else {
-            return handleError('未找到昵称输入框');
-        }
-        sleep(1000);
+    //     // 6. 修改昵称
+    //     log('开始输入新昵称: ' + config.features.editProfile.nickname);
+    //     let nicknameField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
+    //     if (nicknameField) {
+    //         nicknameField.setText('');
+    //         sleep(500);
+    //         nicknameField.setText(config.features.editProfile.nickname);
+    //         log('昵称输入完成');
+    //     } else {
+    //         return handleError('未找到昵称输入框');
+    //     }
+    //     sleep(1000);
 
-        // 7. 保存昵称
-        log('点击保存昵称');
-        if (!retryAction(() => clickNearestClickable('Save'), 3)) {
-            return handleError('无法保存昵称');
-        }
-        sleep(4000);
-        // confirm
-        log('点击确认');
-        if (!retryAction(() => clickNearestClickable('Confirm'), 3)) {
-            return handleError('无法确认昵称修改');
-        }
-        sleep(1000);
-        log('昵称修改完成');
+    //     // 7. 保存昵称
+    //     log('点击保存昵称');
+    //     if (!retryAction(() => clickNearestClickable('Save'), 3)) {
+    //         return handleError('无法保存昵称');
+    //     }
+    //     sleep(4000);
+    //     // confirm
+    //     log('点击确认');
+    //     if (!retryAction(() => clickNearestClickable('Confirm'), 3)) {
+    //         return handleError('无法确认昵称修改');
+    //     }
+    //     sleep(1000);
+    //     log('昵称修改完成');
 
-        // 关闭app
-        back();
-        sleep(1000);
+    //     // 关闭app
+    //     back();
+    //     sleep(1000);
 
-    }
+    // }
 
     // 修改简介
     if (config.features.editProfile.bio) {
