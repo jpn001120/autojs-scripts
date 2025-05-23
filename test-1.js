@@ -482,7 +482,9 @@ function editProfile() {
 
         // 4. 点击头像 text('Change photo')
         log('点击当前头像');
-        clickNearestClickable('Change photo');
+        if (!retryAction(() => clickNearestClickable('Change photo'), 3)) {
+            return handleError('无法进入更换照片页面');
+        }
         sleep(2000);
 
         // 5. 点击Change photo
