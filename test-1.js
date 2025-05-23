@@ -466,7 +466,7 @@ function editProfile() {
         
         // 0. 下载头像图片
         log('开始下载头像图片');
-        let avatarPath = '/sdcard/DCIM/Camera/avatar.png';
+        let avatarPath = '/sdcard/Pictures/avatar.png';
         try {
             let response = http.get(config.features.editProfile.avatar);
             if (response.statusCode === 200) {
