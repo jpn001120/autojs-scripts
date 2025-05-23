@@ -370,8 +370,7 @@ function editProfile() {
         if (!retryAction(() => (clickNearestClickable('Profile')), 3)) {
             return handleError('无法进入个人资料页面');
         }
-        sleep(2000);
-        
+
     } else {
         log('已登录状态');
     }
