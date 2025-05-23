@@ -518,15 +518,15 @@ function editProfile() {
         if (!retryAction(() => clickNearestClickable('Next'), 3)) {
             return handleError('无法授予权限');
         }
-        sleep(2000);
+        sleep(10000);
         // 删除avatarPath图片
         // 检查文件是否存在
-        // if (files.exists(avatarPath)) {
-        //     files.remove(avatarPath);
-        //     toast("图片已删除");
-        // } else {
-        //     toast("文件不存在");
-        // }
+        if (files.exists(avatarPath)) {
+            files.remove(avatarPath);
+            toast("图片已删除");
+        } else {
+            toast("文件不存在");
+        }
 
         log('头像修改完成');
     }
