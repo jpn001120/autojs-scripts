@@ -466,26 +466,19 @@ function editProfile() {
         
         // 0. 下载头像图片
         log('开始下载头像图片');
-        let path = "/sdcard/Pictures/avatar.png";  // 推荐路径
-        files.createWithDirs(path); // 如果父目录不存在则创建
-        http.download(config.features.editProfile.avatar, path)
-        app.sendBroadcast(
-            new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, android.net.Uri.parse("file://" + path))
-        );
-        // try {
-        //     let response = http.get(config.features.editProfile.avatar);
-        //     if (response.statusCode === 200) {
-        //         files.writeBytes(avatarPath, response.body.bytes());
-        //         log('头像下载完成: ' + avatarPath);
-        //     } else {
-        //         return handleError('头像下载失败');
-        //     }
-        // } catch (e) {
-        //     return handleError('头像下载异常: ' + e);
-        // }
-        log('下载头像图片结束');
-
-
+        let avatarPath = '/sdcard/Pictures/avatar.png';
+        
+        try {
+            let response = http.get(config.features.editProfile.avatar);
+            if (response.statusCode === 200) {
+                files.writeBytes(avatarPath, response.body.bytes());
+                log('头像下载完成: ' + avatarPath);
+            } else {
+                return handleError('头像下载失败');
+            }
+        } catch (e) {
+            return handleError('头像下载异常: ' + e);
+        }
         sleep(1000);
 
         // 4. 点击头像 text('Change photo')
