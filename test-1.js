@@ -667,7 +667,7 @@ function main() {
     // 启动主循环
     while (true) {
         try { 
-            
+            console.log('程序启动');
             step(); 
         } catch (e) { 
             console.error(e); 
