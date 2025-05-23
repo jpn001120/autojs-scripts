@@ -6,6 +6,8 @@ const STATES = {
     PROFILE: 'PROFILE',
     LOGIN_FLOW: 'LOGIN_FLOW',
     LOGOUT_FLOW: 'LOGOUT_FLOW',
+    EDIT_PROFILE: 'EDIT_PROFILE',    // 编辑资料
+    UPLOAD_VIDEO: 'UPLOAD_VIDEO',    // 上传视频
     DONE: 'DONE'
 };
 
@@ -15,7 +17,21 @@ const config = {
     email: 'x-uz0uh7w@tsbytlj.com',
     password: '98UWv8Rw4xuDG.',
     verifyCode: '',
-    enableToast: true // 控制是否显示 toast
+    enableToast: true, // 控制是否显示 toast
+    
+    // 新增配置
+    features: {
+        editProfile: {
+            enabled: true,           // 是否启用资料修改
+            nickname: '新昵称',      // 新昵称（可选）
+            bio: '新简介',          // 新简介（可选）
+            avatar: '/sdcard/avatar.jpg'  // 新头像路径（可选）
+        },
+        uploadVideo: {
+            enabled: true,           // 是否启用视频上传
+            videoPath: '/sdcard/video.mp4'  // 视频文件路径
+        }
+    }
 };
 
 // 统一日志函数
@@ -122,19 +138,19 @@ function login() {
     log('开始登录流程');
     printAllTexts(); // 记录初始界面状态
 
-    // 步骤1：点击“Use phone / email / username”
+    // 步骤1：点击"Use phone / email / username"
     if (!retryAction(() => safeClick(desc('Use phone / email / username')))) {
         return handleError('无法进入登录界面');
     }
     sleep(1000);
 
-    // 步骤2：点击“Email / Username”
+    // 步骤2：点击"Email / Username"
     if (!retryAction(() => safeClick(desc('Email / Username')))) {
         return handleError('无法选择邮箱登录');
     }
     sleep(1000);
 
-    // 步骤3：输入邮箱并点击“Continue”
+    // 步骤3：输入邮箱并点击"Continue"
     setClip(config.email); sleep(300);
     click(471, 1358); sleep(800); // 粘贴邮箱
     let shortid = extractShortid(config.email);
