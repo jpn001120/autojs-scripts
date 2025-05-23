@@ -615,6 +615,7 @@ function step() {
                 log('PROFILE: 未识别界面，打印文字');
                 printAllTexts(); sleep(2000);
             }
+            sleep(5000)
             break;
 
         case STATES.LOGIN_FLOW:
