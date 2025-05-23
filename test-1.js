@@ -371,14 +371,14 @@ function editProfile() {
 
     // 3. 点击profile
     log('点击个人资料按钮');
-    if (!retryAction(() => safeClick(desc('Profile')), 3)) {
+    if (!retryAction(() => (clickNearestClickable('Profile')), 3)) {
         return handleError('无法进入个人资料页面');
     }
     sleep(2000);
 
     // 4. 点击Set up profile
     log('点击设置资料按钮');
-    if (!retryAction(() => safeClick(desc('Set up profile')), 3)) {
+    if (!retryAction(() => clickNearestClickable('Set up profile'), 3)) {
         return handleError('无法进入资料设置页面');
     }
     sleep(2000);
@@ -408,7 +408,7 @@ function editProfile() {
 
         // 7. 保存昵称
         log('点击保存昵称');
-        if (!retryAction(() => safeClick(text('Save')), 3)) {
+        if (!retryAction(() => clickNearestClickable(text('Save')), 3)) {
             return handleError('无法保存昵称');
         }
         log('昵称修改完成');
