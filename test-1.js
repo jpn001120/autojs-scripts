@@ -344,65 +344,169 @@ function clickNearestClickable(textToFind) {
 }
 // 资料修改模块
 function editProfile() {
-    // 修改3个选项 如果昵称不为空 就修改昵称 如果简介不为空 就修改简介 如果头像不为空 就修改头像
+    log('开始修改资料流程');
+    
+    // 1. 打开app 如果已经打开了就关闭再打开
+    log('检查并启动TikTok应用');
+    if (currentPackage() === config.packageName) {
+        log('TikTok已运行，先关闭应用');
+        app.launchPackage(config.packageName);
+        sleep(2000);
+        back();
+        sleep(1000);
+    }
+    log('启动TikTok应用');
+    app.launchPackage(config.packageName);
+    sleep(3000);
+
+    // 2. 判断是否已经登录 如果没登录 就执行登录
+    log('检查登录状态');
+    if (text('Log in to TikTok').exists()) {
+        log('未登录，执行登录流程');
+        login();
+    } else {
+        log('已登录状态');
+    }
+    sleep(2000);
+
+    // 3. 点击profile
+    log('点击个人资料按钮');
+    if (!retryAction(() => safeClick(desc('Profile')), 3)) {
+        return handleError('无法进入个人资料页面');
+    }
+    sleep(2000);
+
+    // 4. 点击Set up profile
+    log('点击设置资料按钮');
+    if (!retryAction(() => safeClick(desc('Set up profile')), 3)) {
+        return handleError('无法进入资料设置页面');
+    }
+    sleep(2000);
+
+    // 修改昵称
     if (config.features.editProfile.nickname) {
-        // 1. 打开app 如果已经打开了就关闭再打开
+        log('开始修改昵称');
+        // 5. 点击Name进入昵称编辑页面
+        log('点击Name进入昵称编辑页面');
+        if (!retryAction(() => clickNearestClickable('Name'), 3)) {
+            return handleError('无法进入昵称编辑页面');
+        }
+        sleep(2000);
 
-        // 2. 判断是否已经登录 如果没登录 就执行登录
+        // 6. 修改昵称
+        log('开始输入新昵称: ' + config.features.editProfile.nickname);
+        let nicknameField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
+        if (nicknameField) {
+            nicknameField.setText('');
+            sleep(500);
+            nicknameField.setText(config.features.editProfile.nickname);
+            log('昵称输入完成');
+        } else {
+            return handleError('未找到昵称输入框');
+        }
+        sleep(1000);
 
-        // 3. 点击profile 
-
-        // 4. 点击desc('Set up profile') 
-
-        // 5. 模糊文本点击clickNearestClickable() Name 进入昵称编辑页面
-
-        // 6. 获取fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的昵称
-
-        // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成
-
-        // 退出app
-
+        // 7. 保存昵称
+        log('点击保存昵称');
+        if (!retryAction(() => safeClick(text('Save')), 3)) {
+            return handleError('无法保存昵称');
+        }
+        log('昵称修改完成');
+        sleep(2000);
     }
+
+    // 修改简介
     if (config.features.editProfile.bio) {
-        // 1. 打开app 如果已经打开了就关闭再打开
+        log('开始修改简介');
+        // 5. 点击Bio进入简介编辑页面
+        log('点击Bio进入简介编辑页面');
+        if (!retryAction(() => clickNearestClickable('Bio'), 3)) {
+            return handleError('无法进入简介编辑页面');
+        }
+        sleep(2000);
 
-        // 2. 判断是否已经登录 如果没登录 就执行登录
+        // 6. 修改简介
+        log('开始输入新简介: ' + config.features.editProfile.bio);
+        let bioField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
+        if (bioField) {
+            bioField.setText('');
+            sleep(500);
+            bioField.setText(config.features.editProfile.bio);
+            log('简介输入完成');
+        } else {
+            return handleError('未找到简介输入框');
+        }
+        sleep(1000);
 
-        // 3. 点击profile 
-
-        // 4. 点击desc('Set up profile') 
-
-        // 5. 模糊文本点击clickNearestClickable() Name 进入昵称编辑页面
-
-        // 6.fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的简介
-
-        // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成  
-        
-        // 退出app
-
+        // 7. 保存简介
+        log('点击保存简介');
+        if (!retryAction(() => safeClick(text('Save')), 3)) {
+            return handleError('无法保存简介');
+        }
+        log('简介修改完成');
+        sleep(2000);
     }
 
+    // 修改头像
     if (config.features.editProfile.avatar) {
-        console.log('修改头像');
-        // 0. 下载头像图片到/Download文件夹 https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/1.png
-
-        // 1. 打开app 如果已经打开了就关闭再打开
-
-        // 2. 判断是否已经登录 如果没登录 就执行登录
-
-        // 3. 点击profile 
+        log('开始修改头像');
+        
+        // 0. 下载头像图片
+        log('开始下载头像图片');
+        let avatarPath = '/sdcard/Download/avatar.png';
+        try {
+            let response = http.get('https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/1.png');
+            if (response.statusCode === 200) {
+                files.writeBytes(avatarPath, response.body.bytes());
+                log('头像下载完成: ' + avatarPath);
+            } else {
+                return handleError('头像下载失败');
+            }
+        } catch (e) {
+            return handleError('头像下载异常: ' + e);
+        }
+        sleep(1000);
 
         // 4. 点击头像
+        log('点击当前头像');
+        let avatarBtn = desc('Profile photo').findOne(3000);
+        if (!avatarBtn) {
+            return handleError('未找到头像按钮');
+        }
+        safeClick(avatarBtn);
+        sleep(2000);
 
-        // 5. 点击text('Change photo')
+        // 5. 点击Change photo
+        log('点击更换照片按钮');
+        if (!retryAction(() => safeClick(text('Change photo')), 3)) {
+            return handleError('无法进入更换照片页面');
+        }
+        sleep(2000);
 
         // 6. 点击ALLOW
+        log('点击允许权限按钮');
+        if (!retryAction(() => safeClick(text('ALLOW')), 3)) {
+            return handleError('无法授予权限');
+        }
+        sleep(2000);
 
-        // 7. 点击左上角第一个 137 368
+        // 7. 点击左上角第一个
+        log('点击左上角第一个图片');
+        click(137, 368);
+        sleep(2000);
 
-        // 
-        console.log('修改头像完成');
+        log('头像修改完成');
     }
+
+    log('所有资料修改完成');
+    // 退出app
+    log('退出TikTok应用');
+    back();
+    sleep(1000);
+    back();
+    sleep(1000);
+    back();
+    sleep(1000);
 }
 
 // 视频上传模块
