@@ -470,20 +470,26 @@ function step() {
 // 主函数
 function main() {
     console.show();
-    log('脚本启动 - 请选择要执行的功能：');
-    log('1. 登录/登出');
-    log('2. 修改资料');
-    log('3. 上传视频');
-    log('4. 全部执行');
+    log('脚本启动 - 默认执行修改资料功能');
     
-    // 这里可以添加用户选择逻辑
-    // 根据选择设置 config.features 中的 enabled 值
+    // 设置默认功能
+    config.features.editProfile.enabled = true;
+    config.features.uploadVideo.enabled = false;
+    
+    // 设置初始状态为检查启动
+    currentState = STATES.CHECK_LAUNCH;
+    
+    // 启动主循环
+    while (true) {
+        try { 
+            step(); 
+        } catch (e) { 
+            console.error(e); 
+            log('脚本异常，重试'); 
+        }
+        sleep(500);
+    }
 }
 
-// 主循环
-console.show();
-log('脚本启动 - 状态机模式');
-while (true) {
-    try { step(); } catch (e) { console.error(e); log('脚本异常，重试'); }
-    sleep(500);
-}
+// 启动脚本
+main();
