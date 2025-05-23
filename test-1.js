@@ -599,13 +599,13 @@ function step() {
 
         case STATES.PROFILE:
             log('状态: PROFILE');
-            safeClick(desc('Profile')); sleep(2000);
+            clickNearestClickable(('Profile')); sleep(2000);
             if (text('Log in to TikTok').exists() && desc('Use phone / email / username').exists()) {
                 log('检测到登录界面');
                 currentState = STATES.LOGIN_FLOW;
             } else if (desc('Add another account').exists()) {
                 log('检测到已登录状态，点击 Add another account');
-                safeClick(desc('Add another account'));
+                clickNearestClickable(('Add another account'));
                 sleep(1500);
                 currentState = STATES.LOGIN_FLOW;
             } else if (text('Settings and privacy').exists()) {
