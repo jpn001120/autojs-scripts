@@ -381,7 +381,18 @@ function editProfile() {
         // 退出app
 
     }
-    
+
+    if (config.features.editProfile.avatar) {
+        console.log('修改头像');
+        // 1. 打开app 如果已经打开了就关闭再打开
+
+        // 2. 判断是否已经登录 如果没登录 就执行登录
+
+        // 3. 点击profile 
+
+        // 
+        console.log('修改头像完成');
+    }
 }
 
 // 视频上传模块
