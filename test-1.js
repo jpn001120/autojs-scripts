@@ -344,13 +344,40 @@ function clickNearestClickable(textToFind) {
 }
 // 资料修改模块
 function editProfile() {
-    // 1. 打开app 如果已经打开了就关闭再打开
+    // 修改3个选项 如果昵称不为空 就修改昵称 如果简介不为空 就修改简介 如果头像不为空 就修改头像
+    if (config.features.editProfile.nickname) {
+        // 1. 打开app 如果已经打开了就关闭再打开
 
-    // 2. 判断是否已经登录 如果没登录 就执行登录
+        // 2. 判断是否已经登录 如果没登录 就执行登录
 
-    // 3. 点击profile 
+        // 3. 点击profile 
 
-    // 4. 点击desc('Set up profile') 
+        // 4. 点击desc('Set up profile') 
+
+        // 5. 模糊文本点击Name 进入昵称编辑页面
+
+        // 6. 获取fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的昵称
+
+        // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成
+
+    }
+    if (config.features.editProfile.bio) {
+        // 1. 打开app 如果已经打开了就关闭再打开
+
+        // 2. 判断是否已经登录 如果没登录 就执行登录
+
+        // 3. 点击profile 
+
+        // 4. 点击desc('Set up profile') 
+
+        // 5. 模糊文本点击Name 进入昵称编辑页面
+
+        // 6.fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的简介
+
+        // 7.如果修改成功 右上角的Save 就会可以点击 点击保存 昵称修改完成    
+
+    }
+    
 }
 
 // 视频上传模块
