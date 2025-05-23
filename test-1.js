@@ -496,7 +496,7 @@ function editProfile() {
 
         // 6. 点击ALLOW
         log('点击允许权限按钮');
-        if (!retryAction(() => clickNearestClickable('ALLOW'), 3)) {
+        if (!retryAction(() => clickNearestClickable('ALLOW ALL'), 3)) {
             return handleError('无法授予权限');
         }
         sleep(2000);
