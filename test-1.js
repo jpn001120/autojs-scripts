@@ -406,6 +406,13 @@ function editProfile() {
         if (!retryAction(() => clickNearestClickable('Save'), 3)) {
             return handleError('无法保存昵称');
         }
+        sleep(4000);
+        // confirm
+        log('点击确认');
+        if (!retryAction(() => clickNearestClickable('Confirm'), 3)) {
+            return handleError('无法确认昵称修改');
+        }
+        sleep(1000);
         log('昵称修改完成');
 
         // 关闭app
