@@ -373,7 +373,7 @@ function editProfile() {
 
     // 4. 点击Set up profile
     log('点击设置资料按钮');
-    if (!retryAction(() => clickNearestClickable('Set up profile'), 3)) {
+    if (!retryAction(() => clickNearestClickable('Edit profile'), 3)) {
         return handleError('无法进入资料设置页面');
     }
     sleep(2000);
