@@ -384,11 +384,21 @@ function editProfile() {
 
     if (config.features.editProfile.avatar) {
         console.log('修改头像');
+        // 0. 下载头像图片到/Download文件夹 https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/1.png
+
         // 1. 打开app 如果已经打开了就关闭再打开
 
         // 2. 判断是否已经登录 如果没登录 就执行登录
 
         // 3. 点击profile 
+
+        // 4. 点击头像
+
+        // 5. 点击text('Change photo')
+
+        // 6. 点击ALLOW
+
+        // 7. 点击左上角第一个 137 368
 
         // 
         console.log('修改头像完成');
