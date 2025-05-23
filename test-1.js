@@ -520,8 +520,8 @@ function editProfile() {
         }
         sleep(5000);
 
-        log('点击Next');
-        if (!retryAction(() => clickNearestClickable('Next'), 3)) {
+        log('save post'); //text('Save & post')
+        if (!retryAction(() => clickNearestClickable('Save & post'), 3)) {
             return handleError('无法授予权限');
         }
         sleep(5000);
