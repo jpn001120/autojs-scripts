@@ -580,7 +580,7 @@ function step() {
                 clickNearestClickable('Add another account');
                 sleep(1500);
                 currentState = STATES.LOGIN_FLOW;
-            } else if (text('Settings and privacy').exists()) {
+            } else if (text('Settings and privacy').exists()) {// 待完善
                 log('检测到已登录状态，准备登出');
                 currentState = STATES.LOGOUT_FLOW;
             } else {
