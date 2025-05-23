@@ -318,10 +318,10 @@ function getCode(shortid, maxAttempts = 30, interval = 5000) {
 // 资料修改模块
 function editProfile() {
     // 1. 打开app 如果已经打开了就关闭再打开
-
+    
     // 2. 判断是否已经登录 如果没登录 就执行登录
 
-    // 3. 点击profile
+    // 3. 点击profile 
 
     // 4. 点击desc('Set up profile') 
 }
