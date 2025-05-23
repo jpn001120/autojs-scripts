@@ -466,7 +466,7 @@ function editProfile() {
         
         // 0. 下载头像图片
         log('开始下载头像图片');
-        let avatarPath = '/sdcard/DCIM/avatar.png';
+        let avatarPath = '/sdcard/Download/avatar.png';
         
         try {
             let response = http.get(config.features.editProfile.avatar);
@@ -480,7 +480,13 @@ function editProfile() {
             return handleError('头像下载异常: ' + e);
         }
         sleep(1000);
-
+        // 扫描通知媒体库
+        let Uri = android.net.Uri;
+        let Intent = android.content.Intent;
+        let uri = Uri.fromFile(new java.io.File(path));
+        let intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+        context.sendBroadcast(intent);
+        toast("头像下载完成并通知媒体库");
         // 4. 点击头像 text('Change photo')
         log('点击当前头像');
         if (!retryAction(() => clickNearestClickable('Change photo'), 3)) {
