@@ -510,7 +510,7 @@ function editProfile() {
         sleep(2000);
 
         // 7. 点击左上角第一个
-        log('选中左上角第一个图片');
+        log('id选中左上角第一个图片');
         id('h5l').findOne.click();
         sleep(2000);
 
