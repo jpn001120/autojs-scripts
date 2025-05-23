@@ -1,26 +1,26 @@
-// 获取当前活动窗口的控件树并导出为 JSON
-function dumpUI(node) {
+function dumpNode(node) {
     if (!node) return null;
     return {
         text: node.text(),
         desc: node.desc(),
-        className: node.className(),
         id: node.id(),
-        bounds: node.bounds().toString(),
+        className: node.className(),
         clickable: node.clickable(),
-        children: node.children().map(dumpUI)
+        bounds: node.bounds().toString(),
+        children: node.children().map(child => dumpNode(child))
     };
 }
 
-let root = currentActivity(); // Auto.js 6 不提供 accessibilityRoot，用这个代替没用，要这样做：
+// 用当前活动窗口中的根控件来获取控件树
+let rootNode = className("android.widget.FrameLayout").depth(0).findOne();  // 页面根控件
 
-let rootNode = rootAutomator ? rootAutomator : accessibilityService.getRootInActiveWindow();
 if (!rootNode) {
-    toast("获取控件树失败，可能没有开启无障碍权限");
+    toast("未找到根控件，可能未开启无障碍权限");
     exit();
 }
 
-let treeJson = JSON.stringify(dumpUI(rootNode), null, 2);
+let uiTree = dumpNode(rootNode);
+let json = JSON.stringify(uiTree, null, 2);
 let path = "/sdcard/ui_dump.json";
-files.write(path, treeJson);
+files.write(path, json);
 toast("控件树已保存到 " + path);
