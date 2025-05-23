@@ -442,13 +442,17 @@ function step() {
 
         case STATES.EDIT_PROFILE:
             log('状态: EDIT_PROFILE');
-            editProfile();
+            if (config.features.editProfile.enabled) {
+                editProfile();
+            }
             currentState = STATES.DONE;
             break;
 
         case STATES.UPLOAD_VIDEO:
             log('状态: UPLOAD_VIDEO');
-            uploadVideo();
+            if (config.features.uploadVideo.enabled) {
+                uploadVideo();
+            }
             currentState = STATES.DONE;
             break;
 
@@ -461,6 +465,19 @@ function step() {
             log('未知状态，退出');
             exit();
     }
+}
+
+// 主函数
+function main() {
+    console.show();
+    log('脚本启动 - 请选择要执行的功能：');
+    log('1. 登录/登出');
+    log('2. 修改资料');
+    log('3. 上传视频');
+    log('4. 全部执行');
+    
+    // 这里可以添加用户选择逻辑
+    // 根据选择设置 config.features 中的 enabled 值
 }
 
 // 主循环
