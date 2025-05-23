@@ -139,7 +139,7 @@ function login() {
     printAllTexts(); // 记录初始界面状态
 
     // 步骤1：点击"Use phone / email / username"
-    if (!retryAction(() => clickNearestClickable('Use phone / email / username')))) {
+    if (!retryAction(() => clickNearestClickable('Use phone / email / username'))) {
         return handleError('无法进入登录界面');
     }
     sleep(1000);
@@ -667,6 +667,7 @@ function main() {
     // 启动主循环
     while (true) {
         try { 
+            
             step(); 
         } catch (e) { 
             console.error(e); 
