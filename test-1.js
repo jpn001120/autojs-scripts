@@ -547,6 +547,7 @@ let currentState = STATES.CHECK_LAUNCH;
 
 function step() {
     switch (currentState) {
+        log('状态机判断中...')
         case STATES.CHECK_LAUNCH:
             log('状态: CHECK_LAUNCH');
             if (currentPackage() !== config.packageName) {
