@@ -465,7 +465,7 @@ function editProfile() {
         log('开始修改头像');
         
         // 0. 下载头像图片
-        log('开始下载头像图片');
+        log('开始下载头像图片 ');
         let avatarPath = '/sdcard/Download/avatar.png';
         
         try {
