@@ -506,6 +506,11 @@ function editProfile() {
         click(137, 368);
         sleep(2000);
 
+        log('Next');
+        if (!retryAction(() => clickNearestClickable('Next'), 3)) {
+            return handleError('无法授予权限');
+        }
+
         log('头像修改完成');
     }
 
