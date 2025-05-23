@@ -480,9 +480,9 @@ function editProfile() {
         }
         sleep(1000);
 
-        // 4. 点击头像
+        // 4. 点击头像 text('Change photo')
         log('点击当前头像');
-        let avatarBtn = desc('Profile photo').findOne(3000);
+        let avatarBtn = clickNearestClickable('Change photo').findOne(3000);
         if (!avatarBtn) {
             return handleError('未找到头像按钮');
         }
