@@ -25,7 +25,7 @@ const config = {
             enabled: true,           // 是否启用资料修改
             nickname: 'wqnmd008',      // 新昵称（可选）
             bio: 'follow me for every day',          // 新简介（可选）
-            avatar: '/sdcard/avatar.jpg'  // 新头像路径（可选）
+            // avatar: '/sdcard/avatar.jpg'  // 新头像路径（可选）
         },
         uploadVideo: {
             enabled: true,           // 是否启用视频上传
@@ -354,7 +354,7 @@ function editProfile() {
 
         // 4. 点击desc('Set up profile') 
 
-        // 5. 模糊文本点击Name 进入昵称编辑页面
+        // 5. 模糊文本点击clickNearestClickable() Name 进入昵称编辑页面
 
         // 6. 获取fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的昵称
 
@@ -372,7 +372,7 @@ function editProfile() {
 
         // 4. 点击desc('Set up profile') 
 
-        // 5. 模糊文本点击Name 进入昵称编辑页面
+        // 5. 模糊文本点击clickNearestClickable() Name 进入昵称编辑页面
 
         // 6.fullId('com.zhiliaoapp.musically:id/eu1')的输入框, 先清空 在输入新的简介
 
