@@ -25,7 +25,7 @@ const config = {
             enabled: true,           // 是否启用资料修改
             nickname: 'wqnmd008',      // 新昵称（可选）
             bio: 'follow me for every day',          // 新简介（可选）
-            // avatar: '/sdcard/avatar.jpg'  // 新头像路径（可选）
+            avatar: 'https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/1.png'  // 新头像路径（可选）
         },
         uploadVideo: {
             enabled: true,           // 是否启用视频上传
@@ -463,7 +463,7 @@ function editProfile() {
         log('开始下载头像图片');
         let avatarPath = '/sdcard/Download/avatar.png';
         try {
-            let response = http.get('https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/1.png');
+            let response = http.get(config.features.editProfile.avatar);
             if (response.statusCode === 200) {
                 files.writeBytes(avatarPath, response.body.bytes());
                 log('头像下载完成: ' + avatarPath);
