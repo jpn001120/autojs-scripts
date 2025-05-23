@@ -483,6 +483,8 @@ function editProfile() {
         // } catch (e) {
         //     return handleError('头像下载异常: ' + e);
         // }
+        
+
         sleep(1000);
 
         // 4. 点击头像 text('Change photo')
