@@ -658,7 +658,7 @@ function step() {
 
         case STATES.DONE:
             log('状态: DONE，脚本结束');
-            exit();
+            exit(); // 好像会报错
             break;
 
         default:
