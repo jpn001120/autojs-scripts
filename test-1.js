@@ -708,7 +708,7 @@ function uploadVideo() {
 
         // 2.点击 右下角相册按钮id('kno')
         log('id 选中左上角第一个图片');
-        id('kno').findOne().click();
+        id('id('bp2')').findOne().click();
         sleep(2000);
 
         // 3. 选择视频文件 id('h5l')
