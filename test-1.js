@@ -610,7 +610,7 @@ function restartApp(packageName) {
 function uploadVideo() {
     console.log(`
         2025-05-26 15:13:55
-        
+
         `);
         
     if (config.features.uploadVideo.videoUrl) {
@@ -622,7 +622,7 @@ function uploadVideo() {
         let url = 'https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/topmodel.mp4';
         let savePath = '/sdcard/Download/topmodel.mp4';
 
-        if(!downloadFile(url, savePath)){
+        if(!downloadFile(config.features.uploadVideo.videoUrl, savePath)){
             return handleError('无法下载视频');
         };
 
