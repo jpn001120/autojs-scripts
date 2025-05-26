@@ -748,7 +748,7 @@ function uploadVideo() {
         postBtn.click();
         sleep(2000);
 
-        
+
 
         log('视频上传完成');
 
@@ -863,7 +863,7 @@ function main() {
     while (true) {
         try { 
             console.log('程序启动');
-            // step(); 
+            step(); 
             
         } catch (e) { 
             console.error(e); 
