@@ -641,26 +641,13 @@ function uploadVideo() {
         
         // 
         log('WHILE USING THE APP 权限允许判断')
-        printAllTexts();
-        let permissionPatterns = [
-            /WHILE USING THE APP/i,
-            /Allow only while using the app/i,
-            /仅在使用应用时允许/,
-            /始终允许/,
-        ];
-        
-        let found = false;
-        for (let pattern of permissionPatterns) {
-            let btn = textMatches(pattern).findOne(1000);
-            if (btn) {
-                btn.click();
-                log("点击权限按钮：" + btn.text());
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            log("未发现权限弹窗，无需处理");
+        auto.waitFor();
+        sleep(2000);
+        let allowButton = text("WHILE USING THE APP").findOne(5000); // 等待最多5秒
+        if (allowButton) {
+            allowButton.click();
+        } else {
+            console.log("未找到 'WHILE USING THE APP' 按钮");
         }
         
 
