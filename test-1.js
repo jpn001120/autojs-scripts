@@ -572,10 +572,11 @@ function downloadFile(url, path) {
 
 // 通知系统媒体库刷新，让系统相册等能看到新视频
 function mediaScan(filePath) {
-    let context = context || engines.myEngine().getContext();
-    let uri = android.net.Uri.fromFile(new java.io.File(filePath));
-    let intent = new android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
-    context.sendBroadcast(intent);
+    let Uri = android.net.Uri;
+        let Intent = android.content.Intent;
+        let uri = Uri.fromFile(new java.io.File(filePath));
+        let intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+        context.sendBroadcast(intent);
 }
 function restartApp(packageName) {
 
