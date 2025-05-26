@@ -608,7 +608,7 @@ function restartApp(packageName) {
 // 视频上传模块
 function uploadVideo() {
 
-    if (config.uploadVideo.videoUrl) {
+    if (config.features.uploadVideo.videoUrl) {
 
         restartApp(config.packageName);
         // 0. 下载视频
