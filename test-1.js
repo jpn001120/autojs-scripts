@@ -531,7 +531,7 @@ function editProfile() {
             return handleError('无法授予权限');
         }
         sleep(5000);
-        
+
         // 删除avatarPath图片
         // 检查文件是否存在
         if (files.exists(avatarPath)) {
