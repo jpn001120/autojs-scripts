@@ -637,7 +637,7 @@ function uploadVideo() {
         sleep(1000);
         
         // 
-        log('WHILE USING THE APP')
+        log('WHILE USING THE APP 权限允许判断')
         let permissionPatterns = [
             /WHILE USING THE APP/i,
             /Allow only while using the app/i,
@@ -650,13 +650,13 @@ function uploadVideo() {
             let btn = textMatches(pattern).findOne(1000);
             if (btn) {
                 btn.click();
-                toast("点击权限按钮：" + btn.text());
+                log("点击权限按钮：" + btn.text());
                 found = true;
                 break;
             }
         }
         if (!found) {
-            toast("未发现权限弹窗，无需处理");
+            log("未发现权限弹窗，无需处理");
         }
         
 
