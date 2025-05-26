@@ -572,6 +572,7 @@ function downloadFile(url, path) {
 
 // 通知系统媒体库刷新，让系统相册等能看到新视频
 function mediaScan(filePath) {
+    log('通知媒体库刷新' + filePath)
     let Uri = android.net.Uri;
         let Intent = android.content.Intent;
         let uri = Uri.fromFile(new java.io.File(filePath));
