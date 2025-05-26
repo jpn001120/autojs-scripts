@@ -610,8 +610,7 @@ function restartApp(packageName) {
 // 视频上传模块
 function uploadVideo() {
     console.log(`
-        2025-05-26 15:18:40
-
+        2025-05-26 15:20:47
         `);
         
     if (config.features.uploadVideo.videoUrl) {
