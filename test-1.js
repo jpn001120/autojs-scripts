@@ -29,7 +29,8 @@ const config = {
         },
         uploadVideo: {
             enabled: true,           // 是否启用视频上传
-            videoUrl: 'https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/topmodel.mp4'  // 视频文件路径
+            videoUrl: 'https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/topmodel.mp4';  // 视频文件路径
+            descirption:'funny day'
         }
     }
 };
