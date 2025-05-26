@@ -584,25 +584,20 @@ function restartApp(packageName) {
     if (currentPackage() === config.packageName) {
         log('正在重启应用：' + packageName);
 
-    // 强制停止
-    let result = shell('am force-stop ' + packageName, true);
-    if (result.code === 0) {
-        log('已使用 shell 强制停止应用');
-    } else {
-        log('shell 强制停止失败，回退使用多次 back 方式');
-        // 退回桌面并多次 back
-        for (let i = 0; i < 5; i++) {
-            back();
-            sleep(300);
+        // 强制停止
+        let result = shell('am force-stop ' + packageName, true);
+        if (result.code === 0) {
+            log('已使用 shell 强制停止应用');
+        } else {
+            log('shell 强制停止失败，回退使用多次 back 方式');
+            // 退回桌面并多次 back
+            for (let i = 0; i < 5; i++) {
+                back();
+                sleep(300);
+            }
+            home();
         }
-        home();
-    }
-    }
-    log('启动TikTok应用');
-    app.launchPackage(config.packageName);
-    sleep(3000);
-    
-    
+    }    
 
     sleep(1000);
     log('重新启动应用...');
