@@ -555,10 +555,37 @@ function editProfile() {
     sleep(1000);
 }
 
+function downloadFile(url, path) {
+    let r = http.get(url);
+    if (r.statusCode === 200) {
+        files.writeBytes(path, r.body.bytes());
+        toast('视频下载完成：' + path);
+
+        // 通知媒体库更新
+        mediaScan(path);
+    } else {
+        toast('下载失败，状态码：' + r.statusCode);
+    }
+}
+
+// 通知系统媒体库刷新，让系统相册等能看到新视频
+function mediaScan(filePath) {
+    let context = context || engines.myEngine().getContext();
+    let uri = android.net.Uri.fromFile(new java.io.File(filePath));
+    let intent = new android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+    context.sendBroadcast(intent);
+}
+
 // 视频上传模块
 function uploadVideo() {
 
     if (config.uploadVideo.videoUrl) {
+
+        // 0. 下载视频
+        log('正在下载视频');
+
+
+
         log('开始上传视频');
     
         // 1. 点击发布按钮
