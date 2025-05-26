@@ -604,7 +604,7 @@ function restartApp(packageName) {
 function uploadVideo() {
 
     if (config.uploadVideo.videoUrl) {
-        
+
         restartApp(config.packageName);
         // 0. 下载视频
         log('正在下载视频');
@@ -747,12 +747,12 @@ function step() {
 
         case STATES.DONE:
             log('状态: DONE，脚本结束');
-            exit(); // 好像会报错
+            // exit(); // 好像会报错
             break;
 
         default:
             log('未知状态，退出');
-            exit();
+            // exit();
     }
 }
 
@@ -762,8 +762,8 @@ function main() {
     log('脚本启动 - 默认执行修改资料功能');
     
     // 设置默认功能
-    config.features.editProfile.enabled = true;
-    config.features.uploadVideo.enabled = false;
+    config.features.editProfile.enabled = false;
+    config.features.uploadVideo.enabled = true;
     
     // 设置初始状态为检查启动
     currentState = STATES.UPLOAD_VIDEO;
