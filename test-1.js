@@ -34,7 +34,68 @@ const config = {
         }
     }
 };
+// ========== 通用权限管理工具类（模块封装） ==========
+const PermissionUtils = {
+    logDivider() {
+        log('---------------------------------------------');
+    },
 
+    getAndroidVersion() {
+        return device.sdkInt;
+    },
+
+    getDefaultPermissions(androidVersion) {
+        let perms = [
+            'android.permission.CAMERA',
+            'android.permission.RECORD_AUDIO'
+        ];
+        if (androidVersion >= 33) {
+            perms.push('android.permission.READ_MEDIA_IMAGES');
+        } else {
+            perms.push('android.permission.READ_EXTERNAL_STORAGE');
+            perms.push('android.permission.WRITE_EXTERNAL_STORAGE');
+        }
+        return perms;
+    },
+
+    isPermissionGranted(pkg, permission) {
+        let result = shell('dumpsys package ' + pkg + ' | grep ' + permission, true);
+        return result.code === 0 && result.stdout.includes('granted=true');
+    },
+
+    grantPermission(pkg, permission) {
+        log('尝试授权: ' + permission);
+        let result = shell('pm grant ' + pkg + ' ' + permission, true);
+        if (result.code === 0) {
+            log('✅ 授权成功: ' + permission);
+            return true;
+        } else {
+            log('❌ 授权失败: ' + permission);
+            log('错误信息: ' + result.stderr.trim());
+            return false;
+        }
+    },
+
+    checkAndGrant(pkg, permissionList) {
+        log('开始权限检查与授权: ' + pkg);
+        permissionList.forEach(permission => {
+            if (this.isPermissionGranted(pkg, permission)) {
+                log('✅ 已授权: ' + permission);
+            } else {
+                log('⚠️ 未授权: ' + permission);
+                this.grantPermission(pkg, permission);
+            }
+            this.logDivider();
+        });
+    },
+
+    checkAndGrantDefault(pkg) {
+        let version = this.getAndroidVersion();
+        let perms = this.getDefaultPermissions(version);
+        this.checkAndGrant(pkg, perms);
+    }
+};
+// ========== 工具类结束 ==========
 // 统一日志函数
 function log(message) {
     console.log(message);
