@@ -589,7 +589,9 @@ function uploadVideo() {
         let url = 'https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/topmodel.mp4';
         let savePath = '/sdcard/Download/topmodel.mp4';
 
-        downloadFile(url, savePath);
+        if(!downloadFile(url, savePath)){
+            return handleError('无法下载视频');
+        };
 
 
         log('开始上传视频');
