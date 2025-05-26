@@ -825,6 +825,7 @@ function step() {
 // 主函数
 function main() {
     console.show();
+    PermissionUtils.checkAndGrantDefault(config.packageName);
     log('脚本启动 - 默认执行修改资料功能');
     
     // 设置默认功能
