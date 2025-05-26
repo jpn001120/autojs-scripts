@@ -60,7 +60,7 @@ const PermissionUtils = {
 
     isPermissionGranted(pkg, permission) {
         let result = shell('dumpsys package ' + pkg + ' | grep ' + permission, true);
-        return result.code === 0 && result.stdout.includes('granted=true');
+        return result.code === 0 && result.stdout && result.stdout.includes('granted=true');
     },
 
     grantPermission(pkg, permission) {
