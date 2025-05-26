@@ -607,7 +607,7 @@ function restartApp(packageName) {
 
 // 视频上传模块
 function uploadVideo() {
-
+    log('2025年05月26日15:06:54')
     if (config.features.uploadVideo.videoUrl) {
 
         restartApp(config.packageName);
