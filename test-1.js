@@ -111,6 +111,7 @@ function safeSetText(field, text, desc) {
 
 // 打印所有文字
 function printAllTexts() {
+    log(printAllTexts);
     let nodes = className('android.widget.TextView').find();
     let texts = nodes.map(n => n.text() && n.text().trim()).filter(t => t);
     log('界面文字: ' + texts.join(' | '));
