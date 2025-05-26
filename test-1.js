@@ -707,7 +707,7 @@ function uploadVideo() {
         
 
         // 2.点击 右下角相册按钮id('kno')
-        og('id 选中左上角第一个图片');
+        log('id 选中左上角第一个图片');
         id('kno').findOne().click();
         sleep(2000);
 
