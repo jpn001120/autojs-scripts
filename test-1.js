@@ -583,7 +583,11 @@ function uploadVideo() {
 
         // 0. 下载视频
         log('正在下载视频');
+        // 下载视频并保存到本地
+        let url = 'https://raw.githubusercontent.com/jpn001120/autojs-scripts/main/topmodel.mp4';
+        let savePath = '/sdcard/Download/topmodel.mp4';
 
+        downloadFile(url, savePath);
 
 
         log('开始上传视频');
