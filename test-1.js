@@ -646,8 +646,9 @@ function uploadVideo() {
         let allowButton = text("WHILE USING THE APP").findOne(5000); // 等待最多5秒
         if (allowButton) {
             allowButton.click();
+            log("已点击 'WHILE USING THE APP' 按钮");
         } else {
-            console.log("未找到 'WHILE USING THE APP' 按钮");
+            log("未找到 'WHILE USING THE APP' 按钮");
         }
         
 
