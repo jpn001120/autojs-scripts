@@ -630,12 +630,14 @@ function uploadVideo() {
         log('开始上传视频');
     
         // 1. 点击发布按钮
+        log('点击发布按钮')
         if (!retryAction(() => desc('Create').findOne(2000).click(), 3)) {
             return handleError('无法进入发布页面');
         }
         sleep(1000);
         
         // 
+        log('WHILE USING THE APP')
         let permissionPatterns = [
             /WHILE USING THE APP/i,
             /Allow only while using the app/i,
