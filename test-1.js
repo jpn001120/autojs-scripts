@@ -703,16 +703,7 @@ function uploadVideo() {
         sleep(1000);
         
         // 
-        log('WHILE USING THE APP 权限允许判断')
-        auto.waitFor();
-        sleep(2000);
-        let allowButton = text("WHILE USING THE APP").findOne(5000); // 等待最多5秒
-        if (allowButton) {
-            allowButton.click();
-            log("已点击 'WHILE USING THE APP' 按钮");
-        } else {
-            log("未找到 'WHILE USING THE APP' 按钮");
-        }
+        log('提前给与权限 root权限 shell命令给')
         
 
         // 2. 选择视频
