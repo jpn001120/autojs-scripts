@@ -710,7 +710,7 @@ function uploadVideo() {
         og('id 选中左上角第一个图片');
         id('kno').findOne().click();
         sleep(2000);
-        
+
         // 3. 选择视频文件 id('h5l')
         log('id 选中左上角第一个图片');
         id('h5l').findOne().click();
@@ -725,6 +725,27 @@ function uploadVideo() {
             return handleError('无法授予权限');
         }
         sleep(2000);
+
+        log('点击Next');
+        if (!retryAction(() => clickNearestClickable('Next'), 3)) {
+            return handleError('无法授予权限');
+        }
+        sleep(2000);
+
+        log('添加视频描述');
+        if(config.features.uploadVideo.descirption){
+
+            descirptionField = id('efy').findOne(2000);
+            descirptionField.setText(config.features.uploadVideo.descirption);
+
+        }else{
+            log('没有视频描述')
+        }
+        sleep(2000);
+
+        log('点击发送post按钮');
+        postBtn = desc('Post').findOne(2000);
+        postBtn.click();
 
         log('视频上传完成');
 
