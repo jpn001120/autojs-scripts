@@ -638,6 +638,7 @@ function uploadVideo() {
         
         // 
         log('WHILE USING THE APP 权限允许判断')
+        printUIInfo();
         let permissionPatterns = [
             /WHILE USING THE APP/i,
             /Allow only while using the app/i,
