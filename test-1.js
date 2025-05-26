@@ -601,6 +601,29 @@ function uploadVideo() {
             return handleError('无法进入发布页面');
         }
         sleep(1000);
+        
+        // 
+        let permissionPatterns = [
+            /WHILE USING THE APP/i,
+            /Allow only while using the app/i,
+            /仅在使用应用时允许/,
+            /始终允许/,
+        ];
+        
+        let found = false;
+        for (let pattern of permissionPatterns) {
+            let btn = textMatches(pattern).findOne(1000);
+            if (btn) {
+                btn.click();
+                toast("点击权限按钮：" + btn.text());
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            toast("未发现权限弹窗，无需处理");
+        }
+        
 
         // 2. 选择视频
         if (!retryAction(() => clickNearestClickable('Upload'), 3)) {
