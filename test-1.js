@@ -604,7 +604,8 @@ function restartApp(packageName) {
 function uploadVideo() {
 
     if (config.uploadVideo.videoUrl) {
-
+        
+        restartApp(config.packageName);
         // 0. 下载视频
         log('正在下载视频');
         // 下载视频并保存到本地
