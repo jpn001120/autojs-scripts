@@ -447,81 +447,81 @@ function editProfile() {
     sleep(2000);
 
     // 修改昵称
-    // if (config.features.editProfile.nickname) {
-    //     log('开始修改昵称');
-    //     // 5. 点击Name进入昵称编辑页面
-    //     log('点击Name进入昵称编辑页面');
-    //     if (!retryAction(() => clickNearestClickable('Name'), 3)) {
-    //         return handleError('无法进入昵称编辑页面');
-    //     }
-    //     sleep(2000);
+    if (config.features.editProfile.nickname) {
+        log('开始修改昵称');
+        // 5. 点击Name进入昵称编辑页面
+        log('点击Name进入昵称编辑页面');
+        if (!retryAction(() => clickNearestClickable('Name'), 3)) {
+            return handleError('无法进入昵称编辑页面');
+        }
+        sleep(2000);
 
-    //     // 6. 修改昵称
-    //     log('开始输入新昵称: ' + config.features.editProfile.nickname);
-    //     let nicknameField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
-    //     if (nicknameField) {
-    //         nicknameField.setText('');
-    //         sleep(500);
-    //         nicknameField.setText(config.features.editProfile.nickname);
-    //         log('昵称输入完成');
-    //     } else {
-    //         return handleError('未找到昵称输入框');
-    //     }
-    //     sleep(1000);
+        // 6. 修改昵称
+        log('开始输入新昵称: ' + config.features.editProfile.nickname);
+        let nicknameField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
+        if (nicknameField) {
+            nicknameField.setText('');
+            sleep(500);
+            nicknameField.setText(config.features.editProfile.nickname);
+            log('昵称输入完成');
+        } else {
+            return handleError('未找到昵称输入框');
+        }
+        sleep(1000);
 
-    //     // 7. 保存昵称
-    //     log('点击保存昵称');
-    //     if (!retryAction(() => clickNearestClickable('Save'), 3)) {
-    //         return handleError('无法保存昵称');
-    //     }
-    //     sleep(4000);
-    //     // confirm
-    //     log('点击确认');
-    //     if (!retryAction(() => clickNearestClickable('Confirm'), 3)) {
-    //         return handleError('无法确认昵称修改');
-    //     }
-    //     sleep(1000);
-    //     log('昵称修改完成');
+        // 7. 保存昵称
+        log('点击保存昵称');
+        if (!retryAction(() => clickNearestClickable('Save'), 3)) {
+            return handleError('无法保存昵称');
+        }
+        sleep(4000);
+        // confirm
+        log('点击确认');
+        if (!retryAction(() => clickNearestClickable('Confirm'), 3)) {
+            return handleError('无法确认昵称修改');
+        }
+        sleep(1000);
+        log('昵称修改完成');
 
-    //     // 关闭app
-    //     back();
-    //     sleep(1000);
+        // 关闭app
+        back();
+        sleep(1000);
 
-    // }
+    }
 
-    // // 修改简介
-    // if (config.features.editProfile.bio) {
+    // 修改简介
+    if (config.features.editProfile.bio) {
         
-    //     // 5. 点击Bio进入简介编辑页面
-    //     log('点击Bio进入简介编辑页面');
-    //     if (!retryAction(() => clickNearestClickable('Bio'), 3)) {
-    //         return handleError('无法进入简介编辑页面');
-    //     }
-    //     sleep(2000);
+        // 5. 点击Bio进入简介编辑页面
+        log('点击Bio进入简介编辑页面');
+        if (!retryAction(() => clickNearestClickable('Bio'), 3)) {
+            return handleError('无法进入简介编辑页面');
+        }
+        sleep(2000);
 
-    //     // 6. 修改简介
-    //     log('开始输入新简介: ' + config.features.editProfile.bio);
-    //     let bioField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
-    //     if (bioField) {
-    //         bioField.setText('');
-    //         sleep(500);
-    //         bioField.setText(config.features.editProfile.bio);
-    //         log('简介输入完成');
-    //     } else {
-    //         return handleError('未找到简介输入框');
-    //     }
-    //     sleep(1000);
+        // 6. 修改简介
+        log('开始输入新简介: ' + config.features.editProfile.bio);
+        let bioField = id('com.zhiliaoapp.musically:id/eu1').findOne(3000);
+        if (bioField) {
+            bioField.setText('');
+            sleep(500);
+            bioField.setText(config.features.editProfile.bio);
+            log('简介输入完成');
+        } else {
+            return handleError('未找到简介输入框');
+        }
+        sleep(1000);
 
-    //     // 7. 保存简介
-    //     log('点击保存简介');
-    //     if (!retryAction(() => clickNearestClickable('Save'), 3)) {
-    //         return handleError('无法保存简介');
-    //     }
-    //     log('简介修改完成');
-    //     sleep(2000);
-    //     back();
-    //     sleep(1000);
-    // }
+        // 7. 保存简介
+        log('点击保存简介');
+        if (!retryAction(() => clickNearestClickable('Save'), 3)) {
+            return handleError('无法保存简介');
+        }
+        log('简介修改完成');
+        sleep(2000);
+        back();
+        sleep(1000);
+    }
 
     // 修改头像
     if (config.features.editProfile.avatar) {
@@ -706,11 +706,7 @@ function uploadVideo() {
         log('提前给与权限 root权限 shell命令给')
         
 
-        // 2. 选择视频
-        if (!retryAction(() => clickNearestClickable('Upload'), 3)) {
-            return handleError('无法进入上传页面');
-        }
-        sleep(1000);
+        // 2.点击 右下角相册按钮id('kno')
 
         // 3. 选择视频文件
         // 这里需要实现文件选择逻辑...
@@ -831,7 +827,8 @@ function main() {
     while (true) {
         try { 
             console.log('程序启动');
-            step(); 
+            // step(); 
+            
         } catch (e) { 
             console.error(e); 
             log('脚本异常，重试'); 
