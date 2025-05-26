@@ -746,6 +746,9 @@ function uploadVideo() {
         log('点击发送post按钮');
         postBtn = desc('Post').findOne(2000);
         postBtn.click();
+        sleep(2000);
+
+        
 
         log('视频上传完成');
 
