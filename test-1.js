@@ -559,13 +559,13 @@ function downloadFile(url, path) {
     let r = http.get(url);
     if (r.statusCode === 200) {
         files.writeBytes(path, r.body.bytes());
-        toast('视频下载完成：' + path);
+        log('视频下载完成：' + path);
 
         // 通知媒体库更新
         mediaScan(path);
         return true
     } else {
-        toast('下载失败，状态码：' + r.statusCode);
+        log('下载失败，状态码：' + r.statusCode);
         return false
     }
 }
