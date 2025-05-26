@@ -71,7 +71,7 @@ const PermissionUtils = {
             return true;
         } else {
             log('❌ 授权失败: ' + permission);
-            log('错误信息: ' + result.stderr.trim());
+            log('错误信息: ' + (result.stderr ? result.stderr.trim() : '无错误信息'));
             return false;
         }
     },
