@@ -564,13 +564,13 @@ function editProfile() {
         }
         sleep(2000);
 
-        // 6. 点击ALLOW
-        log('点击允许权限按钮');
-        if (!retryAction(() => clickNearestClickable('ALLOW ALL'), 1)) {
-            // return handleError('无法授予权限');
-            log('yes allow all already!')
-        }
-        sleep(2000);
+        // // 6. 点击ALLOW
+        // log('点击允许权限按钮');
+        // if (!retryAction(() => clickNearestClickable('ALLOW ALL'), 1)) {
+        //     // return handleError('无法授予权限');
+        //     log('yes allow all already!')
+        // }
+        // sleep(2000);
 
         // 7. 点击左上角第一个
         log('id 选中左上角第一个图片');
@@ -708,12 +708,21 @@ function uploadVideo() {
 
         // 2.点击 右下角相册按钮id('kno')
 
-        // 3. 选择视频文件
+        // 3. 选择视频文件 id('h5l')
+        log('id 选中左上角第一个图片');
+        id('h5l').findOne().click();
+        sleep(2000);
+
         // 这里需要实现文件选择逻辑...
 
         // 4. 等待上传完成
         // 这里需要实现上传进度检测逻辑...
-
+        log('点击Next');
+        if (!retryAction(() => clickNearestClickable('Next'), 3)) {
+            return handleError('无法授予权限');
+        }
+        sleep(2000);
+        
         log('视频上传完成');
 
 
