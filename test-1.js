@@ -526,7 +526,7 @@ function editProfile() {
         }
         sleep(2000);
 
-        log('save post'); //text('Save & post')
+        log('save post'); //text('Save & post') centerX(480).centerY(1986)
         if (!retryAction(() => clickNearestClickable('Save & post'), 3)) {
             return handleError('无法授予权限');
         }
