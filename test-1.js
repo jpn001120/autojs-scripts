@@ -563,8 +563,10 @@ function downloadFile(url, path) {
 
         // 通知媒体库更新
         mediaScan(path);
+        return true
     } else {
         toast('下载失败，状态码：' + r.statusCode);
+        return false
     }
 }
 
