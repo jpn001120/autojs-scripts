@@ -578,6 +578,20 @@ function mediaScan(filePath) {
     context.sendBroadcast(intent);
 }
 function restartApp(packageName) {
+
+    // 1. 打开app 如果已经打开了就关闭再打开
+    log('检查并启动TikTok应用');
+    if (currentPackage() === config.packageName) {
+        log('TikTok已运行，先关闭应用');
+        app.launchPackage(config.packageName);
+        sleep(2000);
+        back();
+        sleep(1000);
+    }
+    log('启动TikTok应用');
+    app.launchPackage(config.packageName);
+    sleep(3000);
+    
     log('正在重启应用：' + packageName);
 
     // 强制停止
