@@ -630,7 +630,7 @@ function uploadVideo() {
         log('开始上传视频');
     
         // 1. 点击发布按钮
-        if (!retryAction(() => clickNearestClickable('Create'), 3)) {
+        if (!retryAction(() => desc('Create').findOne(2000).click(), 3)) {
             return handleError('无法进入发布页面');
         }
         sleep(1000);
