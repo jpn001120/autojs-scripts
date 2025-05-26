@@ -857,7 +857,7 @@ function main() {
     config.features.uploadVideo.enabled = true;
     
     // 设置初始状态为检查启动
-    currentState = STATES.UPLOAD_VIDEO;
+    currentState = STATES.LOGIN_FLOW;
     
     // 启动主循环
     while (true) {
