@@ -557,27 +557,35 @@ function editProfile() {
 
 // 视频上传模块
 function uploadVideo() {
-    log('开始上传视频');
+
+    if (config.uploadVideo.videoUrl) {
+        log('开始上传视频');
     
-    // 1. 点击发布按钮
-    if (!retryAction(() => clickNearestClickable('Create'), 3)) {
-        return handleError('无法进入发布页面');
+        // 1. 点击发布按钮
+        if (!retryAction(() => clickNearestClickable('Create'), 3)) {
+            return handleError('无法进入发布页面');
+        }
+        sleep(1000);
+
+        // 2. 选择视频
+        if (!retryAction(() => clickNearestClickable('Upload'), 3)) {
+            return handleError('无法进入上传页面');
+        }
+        sleep(1000);
+
+        // 3. 选择视频文件
+        // 这里需要实现文件选择逻辑...
+
+        // 4. 等待上传完成
+        // 这里需要实现上传进度检测逻辑...
+
+        log('视频上传完成');
+
+
+    }else{
+        log('上传视频失败,没有视频信息')
     }
-    sleep(1000);
-
-    // 2. 选择视频
-    if (!retryAction(() => clickNearestClickable('Upload'), 3)) {
-        return handleError('无法进入上传页面');
-    }
-    sleep(1000);
-
-    // 3. 选择视频文件
-    // 这里需要实现文件选择逻辑...
-
-    // 4. 等待上传完成
-    // 这里需要实现上传进度检测逻辑...
-
-    log('视频上传完成');
+    
 }
 
 // 状态机核心
@@ -677,7 +685,7 @@ function main() {
     config.features.uploadVideo.enabled = false;
     
     // 设置初始状态为检查启动
-    currentState = STATES.EDIT_PROFILE;
+    currentState = STATES.UPLOAD_VIDEO;
     
     // 启动主循环
     while (true) {
