@@ -518,14 +518,20 @@ function editProfile() {
         if (!retryAction(() => clickNearestClickable('Next'), 3)) {
             return handleError('无法授予权限');
         }
-        sleep(5000);
+        sleep(2000);
 
         log('save post'); //text('Save & post')
         if (!retryAction(() => clickNearestClickable('Save & post'), 3)) {
             return handleError('无法授予权限');
         }
+        sleep(2000);
+        
+        log('save post'); //text('Save & post')
+        if (!retryAction(() => clickNearestClickable('Save & post'), 3)) {
+            return handleError('无法授予权限');
+        }
         sleep(5000);
-
+ m
         // 删除avatarPath图片
         // 检查文件是否存在
         if (files.exists(avatarPath)) {
